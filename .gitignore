@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
+# Añadimos archivo requirements.txt
+requirements.txt
 
 # C extensions
 *.so

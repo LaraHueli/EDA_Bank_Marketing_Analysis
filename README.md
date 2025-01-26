@@ -118,5 +118,36 @@ Para proteger el dataset original, se creó una copia para trabajar en las trans
 3. Se eliminó la columna `Unnamed: 0` utilizando el método `.drop()` para mantener el dataset limpio y organizado.
 4. La copia fue guardada en formato `.csv` en la carpeta correspondiente para mantener la organización del proyecto.
 
+#### Progreso del Proyecto
 
+ **Creación de una función de EDA preliminar**  
+Se creó una función llamada `eda_preliminar` que automatiza el análisis exploratorio inicial del dataset. La función realiza las siguientes tareas:  
+- Muestra una muestra de los datos utilizando `.sample()`.  
+- Proporciona información general sobre el dataset mediante `.info()`.  
+- Calcula y muestra el porcentaje de valores nulos por columna.  
+- Identifica la presencia de filas duplicadas.  
+- Lista las columnas categóricas (tipo `object`).  
+- Cuenta los valores únicos en cada columna categórica utilizando `.value_counts()`.  
 
+La función se probó en el archivo `notebooks/eda_preliminar.ipynb` y luego se trasladó al script `src/sp_limpieza.py` para facilitar su reutilización en otros análisis.
+
+---
+
+#### Información obtenida con la función `eda_preliminar`
+
+El análisis preliminar reveló las siguientes características del dataset:  
+
+- **Valores nulos**  
+  - Columnas con nulos significativos:  
+    - `age`: **11.91%** (5,120 nulos).  
+    - `education`: **4.20%** (1,807 nulos).  
+    - `default`: **20.89%** (8,981 nulos).  
+    - `euribor3m`: **21.53%** (9,256 nulos).  
+  - Otras columnas tienen un porcentaje menor de nulos o están completas.
+
+- **Tipo de datos**  
+  - Mezcla de datos numéricos (`int64`, `float64`) y categóricos (`object`), lo que requerirá un tratamiento diferenciado en análisis posteriores.
+
+- **Datos categóricos**  
+  - Columnas como `job`, `marital` y `education` tienen categorías bien definidas.  
+  - Algunas columnas como `cons.price.idx` y `cons.conf.idx` contienen valores que deberían ser numéricos pero están almacenados como `object`.

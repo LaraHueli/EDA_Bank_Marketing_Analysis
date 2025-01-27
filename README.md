@@ -157,7 +157,7 @@ El análisis preliminar reveló las siguientes características del dataset:
 Se creó un script `sp_limpieza.py` dentro de la carpeta `src` que automatiza la limpieza de las siguientes columnas:
 
 - **Columna `age`**:
-  - Los valores nulos (5,120) fueron reemplazados por la mediana de la columna.
+  - Los valores nulos (5,120) fueron reemplazados por la **media** de la columna.
   - La columna fue convertida de `float` a `int` para el análisis.
 
 - **Columna `education`**:

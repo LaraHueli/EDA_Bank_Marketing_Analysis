@@ -102,52 +102,70 @@ Algunas de las columnas con valores nulos identificadas son:
 - `education`: 41,193 valores no nulos (**1,807 nulos**).
 - `default`: 34,019 valores no nulos (**8,981 nulos**).
 
-#### Acción recomendada:
-Se sugiere realizar un tratamiento para los valores nulos, que puede incluir:
-- **Imputación**: Sustituir los valores nulos por la media, mediana, moda o un valor constante.
-- **Eliminación**: Eliminar filas o columnas con valores nulos si no son relevantes para el análisis.
-- **Análisis más profundo**: Investigar si los valores nulos tienen un patrón específico o si están relacionados con otras variables.
 
-### Transformación del dataset
+## Progreso del Proyecto
 
-Para proteger el dataset original, se creó una copia para trabajar en las transformaciones necesarias. Esta copia se guardó en la carpeta `data/transformation` bajo el nombre `bank-transformed.csv`. Este enfoque permite realizar cambios sin alterar el archivo original.
+### Transformación del Dataset
 
-#### Pasos realizados:
-1. Se creó una copia del dataset original utilizando el método `.copy()` de pandas.
-2. Se renombraron columnas clave para mejorar la legibilidad utilizando el método `.rename()` de pandas.
-3. Se eliminó la columna `Unnamed: 0` utilizando el método `.drop()` para mantener el dataset limpio y organizado.
-4. La copia fue guardada en formato `.csv` en la carpeta correspondiente para mantener la organización del proyecto.
+1. **Copia del dataset**  
+   Para proteger el dataset original, se creó una copia utilizando el método `.copy()` de pandas.
 
-#### Progreso del Proyecto
+2. **Renombrar columnas**  
+   Se renombraron columnas clave para mejorar la legibilidad utilizando el método `.rename()` de pandas.
 
- **Creación de una función de EDA preliminar**  
-Se creó una función llamada `eda_preliminar` que automatiza el análisis exploratorio inicial del dataset. La función realiza las siguientes tareas:  
-- Muestra una muestra de los datos utilizando `.sample()`.  
-- Proporciona información general sobre el dataset mediante `.info()`.  
-- Calcula y muestra el porcentaje de valores nulos por columna.  
-- Identifica la presencia de filas duplicadas.  
-- Lista las columnas categóricas (tipo `object`).  
-- Cuenta los valores únicos en cada columna categórica utilizando `.value_counts()`.  
+3. **Eliminación de columna innecesaria**  
+   Se eliminó la columna `Unnamed: 0` utilizando el método `.drop()` para mantener el dataset limpio y organizado.
 
-La función se probó en el archivo `notebooks/eda_preliminar.ipynb` y luego se trasladó al script `src/sp_limpieza.py` para facilitar su reutilización en otros análisis.
+4. **Guardado del dataset transformado**  
+   La copia transformada fue guardada en formato `.csv` en la carpeta correspondiente `data/transformation/` bajo el nombre `bank-transformed.csv`, manteniendo la organización del proyecto.
 
----
+### Creación de la función `eda_preliminar`
 
-#### Información obtenida con la función `eda_preliminar`
+Se creó una función llamada `eda_preliminar` que automatiza el análisis exploratorio inicial del dataset. Esta función realiza las siguientes tareas:
 
-El análisis preliminar reveló las siguientes características del dataset:  
+- Muestra una muestra aleatoria de los datos utilizando `.sample()`.
+- Proporciona información general sobre el dataset mediante `.info()`.
+- Calcula y muestra el porcentaje de valores nulos por columna.
+- Identifica la presencia de filas duplicadas.
+- Lista las columnas categóricas (tipo `object`).
+- Cuenta los valores únicos en cada columna categórica utilizando `.value_counts()`.
+
+La función fue probada inicialmente en el archivo `notebooks/eda_preliminar.ipynb` y luego trasladada al script `src/sp_limpieza.py` para facilitar su reutilización en otros análisis.
+
+### Información obtenida con la función `eda_preliminar`
+
+El análisis preliminar reveló las siguientes características del dataset:
 
 - **Valores nulos**  
-  - Columnas con nulos significativos:  
-    - `age`: **11.91%** (5,120 nulos).  
-    - `education`: **4.20%** (1,807 nulos).  
-    - `default`: **20.89%** (8,981 nulos).  
-    - `euribor3m`: **21.53%** (9,256 nulos).  
-  - Otras columnas tienen un porcentaje menor de nulos o están completas.
+  Se identificaron las siguientes columnas con valores nulos significativos:
+  - `age`: **11.91%** (5,120 nulos).
+  - `education`: **4.20%** (1,807 nulos).
+  - `default`: **20.89%** (8,981 nulos).
+  - `euribor3m`: **21.53%** (9,256 nulos).
+  
+  Otras columnas tienen un porcentaje menor de nulos o están completas.
 
 - **Tipo de datos**  
-  - Mezcla de datos numéricos (`int64`, `float64`) y categóricos (`object`), lo que requerirá un tratamiento diferenciado en análisis posteriores.
+  El dataset contiene una mezcla de datos numéricos (`int64`, `float64`) y categóricos (`object`), lo que requiere un tratamiento diferenciado en análisis posteriores.
 
 - **Datos categóricos**  
-  - Columnas como `job`, `marital` y `education` tienen categorías bien definidas.  
-  - Algunas columnas como `cons.price.idx` y `cons.conf.idx` contienen valores que deberían ser numéricos pero están almacenados como `object`.
+  Las columnas `job`, `marital` y `education` tienen categorías bien definidas.  
+  Algunas columnas como `cons.price.idx` y `cons.conf.idx` contienen valores que deberían ser numéricos pero están almacenados como `object`.
+
+### Creación de funciones para limpieza de datos
+
+Se creó un script `sp_limpieza.py` dentro de la carpeta `src` que automatiza la limpieza de las siguientes columnas:
+
+- **Columna `age`**:
+  - Los valores nulos (5,120) fueron reemplazados por la mediana de la columna.
+  - La columna fue convertida de `float` a `int` para el análisis.
+
+- **Columna `education`**:
+  - Se unificaron las categorías `basic.4y`, `basic.6y`, y `basic.9y` en una sola categoría llamada `basic`.
+  - Se sustituyeron los valores nulos por `'sin especificar'`.
+
+- **Columna `marital`**:
+  - Se verificó que todos los valores en la columna estuvieran en minúsculas para mantener la consistencia.
+
+- **Otras transformaciones**:
+  - Se limpiaron las columnas `cons.price.idx` y `cons.conf.idx` eliminando las comas, para asegurar que se almacenen como valores numéricos.

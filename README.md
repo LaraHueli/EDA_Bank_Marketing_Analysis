@@ -129,6 +129,14 @@ Algunas de las columnas con valores nulos identificadas son:
 6. **Conversión de variables categóricas**  
    Las columnas categóricas como `poutcome` fueron verificadas y transformadas para asegurar consistencia (por ejemplo, asegurando que los valores sean minúsculas).
 
-7. **Comprobación de valores nulos**  
-   Después de realizar las transformaciones, se verificó que los valores nulos fueran correctamente manejados, imputados o eliminados.
+7. **Nuevas columnas creadas**:
+   - `year`: Año derivado de la columna `date`.
+   - `month`: Mes derivado de la columna `date`.
+   - `day`: Día derivado de la columna `date`.
+
+8. **Eliminación de la columna `date`**:
+   La columna `date` fue eliminada, ya que las nuevas columnas `year`, `month` y `day` proporcionan la información necesaria sin redundancia.
+
+9. **Creación de archivo nuevo**:
+   El archivo `bank-cleaned.csv` fue guardado de forma correcta en la carpeta `data_transformation` y se detalló la estructura de carpetas.
 

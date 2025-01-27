@@ -70,4 +70,28 @@ def convertir_float_a_int(df, columnas):
     for columna in columnas:
         df[columna] = df[columna].fillna(0).astype(int)
     return df
+
+def convertir_int_a_float(df, columna):
+    # Reemplaza comas por puntos y convierte de int a float.
+    df[columna] = df[columna].str.replace(',', '.').astype(float)
+    return df
+
+def limpiar_columnas(df):
+    # Limpiar las columnas 'cons.price.idx' 'euribor3m'  'nr.employed' y 'cons.conf.idx', y convertirlas a float
+    df['cons.price.idx'] = df['cons.price.idx'].str.replace(',', '').astype(float)
+    df['cons.conf.idx'] = df['cons.conf.idx'].str.replace(',', '').astype(float)
+    df['euribor3m'] = df['euribor3m'].str.replace(',', '').astype(float)
+    df['nr.employed'] = df['nr.employed'].str.replace(',', '').astype(float)
+    return df
+
+
+def convertir_fecha(df, columna='date'):
+   #Convierte una columna de fechas a tipo datetime y extrae los componentes: año, mes, día.
+    df[columna] = pd.to_datetime(df[columna], errors='coerce', format='%d-%B-%Y')
+        # Crear nuevas columnas de 'year', 'month' y 'day' a partir de 'date'
+    df['year'] = df[columna].dt.year.fillna(0).astype(int)
+    df['month'] = df[columna].dt.month.fillna(0).astype(int)
+    df['day'] = df[columna].dt.day.fillna(0).astype(int)
+    return df
+
         

@@ -103,69 +103,32 @@ Algunas de las columnas con valores nulos identificadas son:
 - `default`: 34,019 valores no nulos (**8,981 nulos**).
 
 
-## Progreso del Proyecto
+### Progreso del Proyecto
 
 ### Transformación del Dataset
 
 1. **Copia del dataset**  
    Para proteger el dataset original, se creó una copia utilizando el método `.copy()` de pandas.
 
-2. **Renombrar columnas**  
-   Se renombraron columnas clave para mejorar la legibilidad utilizando el método `.rename()` de pandas.
+2. **Eliminación de columnas innecesarias**  
+   Se eliminó la columna `Unnamed: 0` que no aportaba valor al análisis.
 
-3. **Eliminación de columna innecesaria**  
-   Se eliminó la columna `Unnamed: 0` utilizando el método `.drop()` para mantener el dataset limpio y organizado.
+3. **Reemplazo de valores nulos**  
+   Se reemplazaron los valores nulos en varias columnas importantes:
+   - **`education`**, **`job`**, y **`marital`** fueron reemplazados por `'sin especificar'`.
+   - **`default`** tiene un 20.89% de valores nulos; su tratamiento sigue pendiente (posibles opciones: imputación o eliminación).
+   - **`euribor3m`**: Se imputaron los valores nulos con la media de la columna.
+   - **`age`**: Los valores nulos fueron reemplazados con la mediana de la columna.
 
-4. **Guardado del dataset transformado**  
-   La copia transformada fue guardada en formato `.csv` en la carpeta correspondiente `data/transformation/` bajo el nombre `bank-transformed.csv`, manteniendo la organización del proyecto.
+4. **Transformación de columnas de `float` a `int`**  
+   Las columnas `housing`, `loan`, y `age` fueron convertidas de `float` a `int` para mantener consistencia en los datos.
 
-### Creación de la función `eda_preliminar`
+5. **Unificación de categorías en `education`**  
+   Las categorías `basic.4y`, `basic.6y`, y `basic.9y` fueron unificadas en una sola categoría llamada `basic`.
 
-Se creó una función llamada `eda_preliminar` que automatiza el análisis exploratorio inicial del dataset. Esta función realiza las siguientes tareas:
+6. **Conversión de variables categóricas**  
+   Las columnas categóricas como `poutcome` fueron verificadas y transformadas para asegurar consistencia (por ejemplo, asegurando que los valores sean minúsculas).
 
-- Muestra una muestra aleatoria de los datos utilizando `.sample()`.
-- Proporciona información general sobre el dataset mediante `.info()`.
-- Calcula y muestra el porcentaje de valores nulos por columna.
-- Identifica la presencia de filas duplicadas.
-- Lista las columnas categóricas (tipo `object`).
-- Cuenta los valores únicos en cada columna categórica utilizando `.value_counts()`.
+7. **Comprobación de valores nulos**  
+   Después de realizar las transformaciones, se verificó que los valores nulos fueran correctamente manejados, imputados o eliminados.
 
-La función fue probada inicialmente en el archivo `notebooks/eda_preliminar.ipynb` y luego trasladada al script `src/sp_limpieza.py` para facilitar su reutilización en otros análisis.
-
-### Información obtenida con la función `eda_preliminar`
-
-El análisis preliminar reveló las siguientes características del dataset:
-
-- **Valores nulos**  
-  Se identificaron las siguientes columnas con valores nulos significativos:
-  - `age`: **11.91%** (5,120 nulos).
-  - `education`: **4.20%** (1,807 nulos).
-  - `default`: **20.89%** (8,981 nulos).
-  - `euribor3m`: **21.53%** (9,256 nulos).
-  
-  Otras columnas tienen un porcentaje menor de nulos o están completas.
-
-- **Tipo de datos**  
-  El dataset contiene una mezcla de datos numéricos (`int64`, `float64`) y categóricos (`object`), lo que requiere un tratamiento diferenciado en análisis posteriores.
-
-- **Datos categóricos**  
-  Las columnas `job`, `marital` y `education` tienen categorías bien definidas.  
-  Algunas columnas como `cons.price.idx` y `cons.conf.idx` contienen valores que deberían ser numéricos pero están almacenados como `object`.
-
-### Creación de funciones para limpieza de datos
-
-Se creó un script `sp_limpieza.py` dentro de la carpeta `src` que automatiza la limpieza de las siguientes columnas:
-
-- **Columna `age`**:
-  - Los valores nulos (5,120) fueron reemplazados por la **media** de la columna.
-  - La columna fue convertida de `float` a `int` para el análisis.
-
-- **Columna `education`**:
-  - Se unificaron las categorías `basic.4y`, `basic.6y`, y `basic.9y` en una sola categoría llamada `basic`.
-  - Se sustituyeron los valores nulos por `'sin especificar'`.
-
-- **Columna `marital`**:
-  - Se verificó que todos los valores en la columna estuvieran en minúsculas para mantener la consistencia.
-
-- **Otras transformaciones**:
-  - Se limpiaron las columnas `cons.price.idx` y `cons.conf.idx` eliminando las comas, para asegurar que se almacenen como valores numéricos.

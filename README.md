@@ -16,6 +16,20 @@ Este proyecto utiliza Python 3.8 y requiere las siguientes bibliotecas:
 - numpy
 - jupyter
 
+## Estudio previo de combinación de tablas
+Antes de comenzar con el análisis de `bank-additional` y `customer-details`, realizamos un estudio previo combinando los valores `id_` de las dos tablas proporcionadas. El objetivo era evaluar si la unión de los datos nos permitiría trabajar con un único dataset o si sería preferible mantenerlos por separado.
+
+   ### 🔹 Análisis de los resultados
+De los **20,115 IDs en `customer-details`**, solo **20,108 están en `bank-additional`**. Esto significa que **hay 7 IDs en `customer-details` que no existen en `bank-additional`**.
+- No es una gran cantidad, pero es importante revisar por qué no coinciden.
+- Los IDs faltantes en `customer-details` contienen información sobre variables como `Income`, `Teenhome`, `Dt_Customer`, etc.
+- Esos registros podrían representar clientes que no tienen datos en `bank-additional`, lo que podría afectar el análisis.
+   ### 🔹 Opciones evaluadas
+- **Unificar las tablas** si queremos tener una sola tabla con todos los datos disponibles.
+- **Mantenerlas separadas** si los datos en `customer-details` tienen información útil pero incompleta en `bank-additional`.
+   ### 📌 Conclusión
+Dado que `customer-details` solo tiene datos de **20,018 IDs**, la fusión con `merge()` generaba **demasiados valores nulos (`NaN`)**. Por este motivo, hemos decidido **trabajar con `bank-additional` y `customer-details` por separado**.
+
 ## Progreso del Proyecto
 1. **Carga de datos brutos**: Se han incorporado los datos iniciales en la carpeta `data/Data_origen`.
 2. **Creación del EDA preliminar**: Se ha creado un notebook en `notebooks/eda_preliminar.ipynb` para comenzar el análisis.

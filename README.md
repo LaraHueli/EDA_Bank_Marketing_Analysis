@@ -121,65 +121,85 @@ Algunas de las columnas con valores nulos identificadas son:
  
  
  ### Transformación del Dataset
-
-1. **Copia del dataset**  
+ **Copia del dataset**  
    Para proteger el dataset original, se creó una copia utilizando el método `.copy()` de pandas.
-
-2. **Eliminación de columnas innecesarias**  
+**Eliminación de columnas innecesarias**  
    Se eliminó la columna `Unnamed: 0` que no aportaba valor al análisis.
 
 
 ### 📌 **3️⃣ Tercera sesión: Transformación del Dataset**
 
-#### 🔄 **Limpieza y Preprocesamiento de Datos**
+### 🔍 Creación de la función `eda_preliminar`
+Como primer paso en la limpieza de datos, hemos desarrollado la función `eda_preliminar`, la cual nos permite obtener una visión general del dataset. Esta función realiza las siguientes tareas:
 
-3. **Reemplazo de valores nulos**:
-   - `education`, `job`, `marital` → reemplazados por `'sin especificar'`.
-   - `default` → 20.89% de valores nulos (pendiente de tratamiento).
-   - `euribor3m` → imputado con la media.
-   - `age` → reemplazo con la mediana.
-4. **Transformación de tipos de datos**:
-   - `housing`, `loan`, `age` → convertidos de `float` a `int` para consistencia.
-5. **Unificación de categorías en `education`**:
-   - `basic.4y`, `basic.6y`, `basic.9y` → unificados como `basic`.
-6. **Conversión de variables categóricas**:
-   - `poutcome` fue transformado para asegurar consistencia.
-7. **Creación de nuevas columnas derivadas de `date`**:
-   - `year`, `month`, `day`.
-   - Eliminación de `date` para evitar redundancia.
-8. **Eliminación de `latitude` y `longitude`** por no aportar valor relevante.
+- Muestra una muestra aleatoria (`sample(5)`) para observar algunos registros.
+- Presenta información detallada sobre las columnas (`info()`), incluyendo tipos de datos y valores no nulos.
+- Calcula el porcentaje de valores nulos (`isnull()`).
+- Verifica si hay filas duplicadas (`duplicated()`).
+- Identifica las columnas categóricas (`select_dtypes(include='object')`).
+- Muestra la distribución de valores (`value_counts()`) en las variables categóricas.
 
-#### 💾 **Guardado del dataset transformado**
-- Se guardó el dataset limpio en la carpeta `data/` como **`bank_cleaned.csv`**.
-   
+## 📊 Resultados del `eda_preliminar`
 
+### 1️⃣ Tipos de datos inconsistentes
+- Algunas columnas que deberían ser **numéricas** (`float64` o `int64`) están siendo interpretadas como **object** (string en Pandas).
+- **Ejemplos**: `cons_price_idx`, `cons_conf_idx` y `nr_employed` deberían ser `float64`, pero Pandas las considera `object`.
+- 🔹 **Acción a tomar**: Revisar y corregir el formato, eliminando posibles caracteres extraños (como comas en los números).
 
+### 2️⃣ Valores nulos (`isnull()`)
+#### Las columnas con más valores nulos:
+- `default`: **20.89%** de valores nulos.
+- `euribor3m`: **21.53%** de valores nulos.
+- 🔹 **Acción a tomar**: Decidir cómo tratarlos (imputación con media, mediana o eliminación de filas).
 
+### 3️⃣ Filas duplicadas (`duplicated()`)
+- **No hay filas duplicadas** en el dataset, lo cual es positivo. ✅
 
-3. **Reemplazo de valores nulos**  
-   Se reemplazaron los valores nulos en varias columnas importantes:
-   - **`education`**, **`job`**, y **`marital`** fueron reemplazados por `'sin especificar'`.
-   - **`default`** tiene un 20.89% de valores nulos; su tratamiento sigue pendiente (posibles opciones: imputación o eliminación).
-   - **`euribor3m`**: Se imputaron los valores nulos con la media de la columna.
-   - **`age`**: Los valores nulos fueron reemplazados con la mediana de la columna.
+### 4️⃣ Distribución de valores (`value_counts()`)
+#### **Columna `job`**:
+- **Categoría más común**: `admin.` con **10,873 registros**.
+- **Categoría menos común**: `student` con **903 registros**.
 
-4. **Transformación de columnas de `float` a `int`**  
-   Las columnas `housing`, `loan`, y `age` fueron convertidas de `float` a `int` para mantener consistencia en los datos.
+#### **Columna `marital`**:
+- **Mayoría de clientes casados (`MARRIED`)**.
+- **Menos frecuentes**: `SINGLE` y `DIVORCED`.
 
-5. **Unificación de categorías en `education`**  
-   Las categorías `basic.4y`, `basic.6y`, y `basic.9y` fueron unificadas en una sola categoría llamada `basic`.
+#### **Columna `education`**:
+- **Mayoría de clientes con título universitario (`university.degree`)**.
+- **Las categorías `basic.4y`, `basic.6y`, `basic.9y` son similares y podrían unificarse en una sola (`basic`).**
 
-6. **Conversión de variables categóricas**  
-   Las columnas categóricas como `poutcome` fueron verificadas y transformadas para asegurar consistencia (por ejemplo, asegurando que los valores sean minúsculas).
+---
 
-7. **Nuevas columnas creadas**:
-   - `year`: Año derivado de la columna `date`.
-   - `month`: Mes derivado de la columna `date`.
-   - `day`: Día derivado de la columna `date`.
+## 🔄 Limpieza y Preprocesamiento de Datos
 
-8. **Eliminación de la columna `date`**:
-   La columna `date` fue eliminada, ya que las nuevas columnas `year`, `month` y `day` proporcionan la información necesaria sin redundancia.
+### 1️⃣ Conversión de valores a minúsculas  
+Se estandarizaron los valores de las siguientes columnas para evitar inconsistencias en las categorías:  
+- **`job`**, **`marital`**, **`contact`**, **`education`**.
 
-9. **Creación de archivo nuevo**:
-   El archivo `bank-cleaned.csv` fue guardado de forma correcta en la carpeta `data_transformation` y se detalló la estructura de carpetas.
+### 2️⃣ Unificación de categorías  
+- En **`education`**, las categorías **`basic.4y`**, **`basic.6y`**, y **`basic.9y`** fueron unificadas en **`basic`** para simplificación.  
+- Se corrigieron inconsistencias en **`poutcome`** para garantizar uniformidad.  
 
+### 3️⃣ Eliminación de columnas irrelevantes  
+- Se eliminaron **`latitude`** y **`longitude`** por no aportar valor relevante al análisis.  
+- Se eliminó **`date`** tras extraer **`year`**, **`month`** y **`day`** como variables separadas.
+
+### 4️⃣ Transformación de tipos de datos  
+Se realizaron las siguientes conversiones para asegurar consistencia en los datos:  
+- **`age`**, **`housing`**, **`loan`** fueron convertidos de `float` a `int`.  
+- **`cons_price_idx`**, **`cons_conf_idx`**, **`euribor3m`**, **`nr_employed`** fueron convertidos de `object` a `float`.
+
+### 5️⃣ Reemplazo de valores nulos  
+Se manejaron los valores nulos en varias columnas importantes:  
+- **`education`**, **`job`**, y **`marital`** → reemplazados por `'sin especificar'`.  
+- **`age`** → valores nulos reemplazados con la **mediana**.  
+- **`euribor3m`** → valores nulos imputados con la **media**.  
+- **`default`** → sigue teniendo un 20.89% de valores nulos, pendiente de tratamiento.
+
+### 6️⃣ Revisión de variables categóricas  
+Se verificó que las variables categóricas estuvieran limpias y en formato adecuado.  
+- **`poutcome`**, **`job`**, **`marital`**, **`education`** → valores corregidos y en minúsculas para coherencia.
+
+### 💾 Guardado del dataset transformado  
+- Se guardó el dataset limpio en la carpeta **`data/`** con el nombre:  
+  - **`bank_limpio.csv`**

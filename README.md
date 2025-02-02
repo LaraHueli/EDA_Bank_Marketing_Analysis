@@ -1,47 +1,52 @@
 # 📊 Análisis de Marketing Bancario
 
-## 📖 Descripción
+## 📌 Descripción
 Este proyecto realiza un análisis exploratorio de datos para entender los patrones de comportamiento de los clientes bancarios. Su objetivo es identificar factores clave que influyen en las campañas de marketing.
 
-## 🗂 Estructura de las carpetas del Proyecto
-├── data/                # Datos crudos y procesados
-├── notebooks/           # Notebooks de Jupyter con el análisis
-├── src/                 # Scripts de procesamiento
-├── results/             # Gráficos y conclusiones
-├── README.md            # Descripción del proyecto
+### 📌 **1️⃣ Primera sesión: Configuración inicial**
+
+1. **Creación del repositorio en GitHub** y organización del entorno de trabajo.
+2. **Estructura de carpetas y archivos** (`.gitignore`, `venv`, `requirements.txt`).
+3. **Carga de datos brutos** en la carpeta `data/`.
+4. **Importación de librerías** necesarias para el análisis (`pandas`, `numpy`).
+
+## 📂 Estructura de las carpetas del Proyecto
+```
+📁 data/         # Datos crudos y procesados
+📁 notebooks/    # Notebooks de Jupyter con el análisis
+📁 src/          # Scripts de procesamiento
+📁 results/      # Gráficos y conclusiones
+📄 README.md     # Descripción del proyecto
+```
+
+## 🛠 Requerimientos
+Este proyecto utiliza **Python 3.8** y requiere las siguientes bibliotecas:
+- `pandas`
+- `numpy`
+- `jupyter`
 
 
-Este proyecto utiliza Python 3.8 y requiere las siguientes bibliotecas:
-- pandas
-- numpy
-- jupyter
+---  
 
-## Estudio previo de combinación de tablas
-Antes de comenzar con el análisis de `bank-additional` y `customer-details`, realizamos un estudio previo combinando los valores `id_` de las dos tablas proporcionadas. El objetivo era evaluar si la unión de los datos nos permitiría trabajar con un único dataset o si sería preferible mantenerlos por separado.
 
-   ### 🔹 Análisis de los resultados
-De los **20,115 IDs en `customer-details`**, solo **20,108 están en `bank-additional`**. Esto significa que **hay 7 IDs en `customer-details` que no existen en `bank-additional`**.
-- No es una gran cantidad, pero es importante revisar por qué no coinciden.
-- Los IDs faltantes en `customer-details` contienen información sobre variables como `Income`, `Teenhome`, `Dt_Customer`, etc.
-- Esos registros podrían representar clientes que no tienen datos en `bank-additional`, lo que podría afectar el análisis.
-   ### 🔹 Opciones evaluadas
-- **Unificar las tablas** si queremos tener una sola tabla con todos los datos disponibles.
-- **Mantenerlas separadas** si los datos en `customer-details` tienen información útil pero incompleta en `bank-additional`.
-   ### 📌 Conclusión
-Dado que `customer-details` solo tiene datos de **20,018 IDs**, la fusión con `merge()` generaba **demasiados valores nulos (`NaN`)**. Por este motivo, hemos decidido **trabajar con `bank-additional` y `customer-details` por separado**.
+### 📌 **2️⃣ Segunda sesión: Exploración Preliminar de Datos (EDA Preliminar)**
 
-## Progreso del Proyecto
-1. **Carga de datos brutos**: Se han incorporado los datos iniciales en la carpeta `data/Data_origen`.
-2. **Creación del EDA preliminar**: Se ha creado un notebook en `notebooks/eda_preliminar.ipynb` para comenzar el análisis.
-3. **Importación de librerías**: Se han importado las librerías necesarias (`pandas`, `numpy`).
-4. **Primera lectura de datos**: Se ha realizado una inspección inicial de los datos (`head`) para entender la estructura y el contenido del conjunto.
+#### 🔍 **Estudio previo de combinación de tablas**
+Antes de comenzar el análisis de `bank-additional` y `customer-details`, evaluamos la posible fusión de las tablas mediante la columna `id_`.
 
-### 1ª Descripción de las columnas - EDA PRELIMINAR
+- **Análisis de los resultados**:
+  - `bank-additional` contiene **20,108 ID únicos**, mientras que `customer-details` tiene **20,115 ID**.
+  - Existen **7 ID en `customer-details`** que no están en `bank-additional`.
+  - Los datos de `customer-details` contienen información adicional como `income`, `teenhome`, `dt_customer`, etc.
+  
+- **Conclusión**: Dado que la fusión genera **demasiados valores nulos (`NaN`)**, decidimos **trabajar con los datasets por separado**.
 
+
+#### 🔍 **Descripción de las columnas**
 Este dataset contiene información bancaria y variables macroeconómicas relacionadas con clientes y campañas de marketing. A continuación, se detalla cada columna:
 
 | **Columna**          | **Descripción**                                                                |
-|-----------------------|-------------------------------------------------------------------------------|
+|----------------------|--------------------------------------------------------------------------------|
 | `Unnamed: 0`         | Índice sin nombre.                                                             |
 | `age`                | Edad del cliente.                                                              |
 | `job`                | Profesión del cliente.                                                         |
@@ -69,15 +74,11 @@ Este dataset contiene información bancaria y variables macroeconómicas relacio
 
 ---
 
-Este resumen combina la descripción y los nombres de las columnas en una única tabla para mayor claridad. También destaca que estas columnas serán utilizadas en el análisis exploratorio de datos.
-
-
-### Dimensiones e informacion general del dataset
-
+#### 📊 **Dimensiones e información del dataset**
 El dataset contiene **43,000 filas** y **24 columnas**. A continuación, se detalla la información clave sobre los tipos de datos y los valores no nulos de cada columna:
 
 | **Columna**       | **Tipo de dato** | **Valores no nulos** | **Descripción**                                                        |
-|--------------------|------------------|-----------------------|--------------------------------------------------------------------- |
+|-------------------|------------------|----------------------|----------------------------------------------------------------------- |
 | `Unnamed: 0`      | int64            | 43,000               | Índice sin nombre, posiblemente un residuo de exportaciones previas.   |
 | `age`             | float64          | 37,880               | Edad del cliente (valores nulos = 5,120).                              |
 | `job`             | object           | 42,655               | Profesión del cliente (valores nulos = 345).                           |
@@ -102,7 +103,9 @@ El dataset contiene **43,000 filas** y **24 columnas**. A continuación, se deta
 | `latitude`        | float64          | 43,000               | Latitud del cliente (sin valores nulos).                               |
 | `longitude`       | float64          | 43,000               | Longitud del cliente (sin valores nulos).                              |
 | `id`              | object           | 43,000               | Identificador único del cliente.                                       |
-
+- **Número de filas**: 43,000
+- **Número de columnas**: 24
+ 
 #### Observaciones:
 - **Valores nulos**: Hay columnas con valores nulos, como `age` (5,120 nulos) y `education` (1,807 nulos), que deben ser tratados antes del análisis.
 - **Tipos de datos**: Hay una mezcla de datos numéricos (`int64`, `float64`) y categóricos (`object`), lo que requiere diferentes estrategias de procesamiento según el análisis que se desee realizar.
@@ -115,17 +118,43 @@ Algunas de las columnas con valores nulos identificadas son:
 - `age`: 37,880 valores no nulos (**5,120 nulos**).
 - `education`: 41,193 valores no nulos (**1,807 nulos**).
 - `default`: 34,019 valores no nulos (**8,981 nulos**).
-
-
-### Progreso del Proyecto
-
-### Transformación del Dataset
+ 
+ 
+ ### Transformación del Dataset
 
 1. **Copia del dataset**  
    Para proteger el dataset original, se creó una copia utilizando el método `.copy()` de pandas.
 
 2. **Eliminación de columnas innecesarias**  
    Se eliminó la columna `Unnamed: 0` que no aportaba valor al análisis.
+
+
+### 📌 **3️⃣ Tercera sesión: Transformación del Dataset**
+
+#### 🔄 **Limpieza y Preprocesamiento de Datos**
+
+3. **Reemplazo de valores nulos**:
+   - `education`, `job`, `marital` → reemplazados por `'sin especificar'`.
+   - `default` → 20.89% de valores nulos (pendiente de tratamiento).
+   - `euribor3m` → imputado con la media.
+   - `age` → reemplazo con la mediana.
+4. **Transformación de tipos de datos**:
+   - `housing`, `loan`, `age` → convertidos de `float` a `int` para consistencia.
+5. **Unificación de categorías en `education`**:
+   - `basic.4y`, `basic.6y`, `basic.9y` → unificados como `basic`.
+6. **Conversión de variables categóricas**:
+   - `poutcome` fue transformado para asegurar consistencia.
+7. **Creación de nuevas columnas derivadas de `date`**:
+   - `year`, `month`, `day`.
+   - Eliminación de `date` para evitar redundancia.
+8. **Eliminación de `latitude` y `longitude`** por no aportar valor relevante.
+
+#### 💾 **Guardado del dataset transformado**
+- Se guardó el dataset limpio en la carpeta `data/` como **`bank_cleaned.csv`**.
+   
+
+
+
 
 3. **Reemplazo de valores nulos**  
    Se reemplazaron los valores nulos en varias columnas importantes:

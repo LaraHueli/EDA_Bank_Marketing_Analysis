@@ -203,3 +203,16 @@ Se verificó que las variables categóricas estuvieran limpias y en formato adec
 ### 💾 Guardado del dataset transformado  
 - Se guardó el dataset limpio en la carpeta **`data/`** con el nombre:  
   - **`bank_limpio.csv`**
+
+## 🔍 Análisis de Columnas Categóricas
+
+###  Creación del script `sp_eda.py`
+Se creó un script en la carpeta **`src/`** llamado **`sp_eda.py`**, donde se almacenan funciones reutilizables para el análisis exploratorio de datos.
+
+#### 📌 **Funciones creadas en `sp_eda.py`**:
+1. **`calcular_nulos(df)`** ➝ Calcula el número y porcentaje de valores nulos en cada columna.
+   ```python
+   def calcular_nulos(df):
+       numero_nulos = df.isnull().sum()
+       porcentaje_nulos = (df.isnull().sum() / df.shape[0]) * 100
+       return numero_nulos, porcentaje_nulos

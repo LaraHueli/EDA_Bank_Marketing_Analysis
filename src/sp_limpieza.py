@@ -1,7 +1,8 @@
 
 import pandas as pd
 import numpy as np
-
+# Configuración para mostrar todas las columnas
+pd.set_option('display.max_columns', None)
 
 def eda_preliminar(df):
     display(df.sample(5)) #Muestra una muestra aleatoria de 5 filas del DataFrame.

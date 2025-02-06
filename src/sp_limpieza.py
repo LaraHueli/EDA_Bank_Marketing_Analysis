@@ -91,6 +91,11 @@ def limpiar_columnas(df):
         df[columna] = df[columna].str.replace(',', '').astype(float)
     return df
 
+def forzar_age_a_int(df):
+    """Convierte la columna 'age' a tipo 'Int64' permitiendo valores nulos."""
+    df['age'] = df['age'].astype('Int64')  # 'Int64' permite NaN en pandas
+    return df
+
 
 def convertir_fecha(df, columna='date'):
    #Convierte una columna de fechas a tipo datetime y extrae los componentes: año, mes, día.

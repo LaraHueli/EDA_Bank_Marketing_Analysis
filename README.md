@@ -35,7 +35,7 @@ Este proyecto utiliza **Python 3.8** y requiere las siguientes bibliotecas:
 Antes de comenzar el análisis de `bank-additional` y `customer-details`, evaluamos la posible fusión de las tablas mediante la columna `id_`.
 
 - **Análisis de los resultados**:
-  - `bank-additional` contiene **20,108 ID únicos**, mientras que `customer-details` tiene **20,115 ID**.
+  - `bank-additional` contiene **43,000 filas**, mientras que `customer-details` tiene **20,115**.
   - Existen **7 ID en `customer-details`** que no están en `bank-additional`.
   - Los datos de `customer-details` contienen información adicional como `income`, `teenhome`, `dt_customer`, etc.
   
@@ -109,8 +109,8 @@ El dataset contiene **43,000 filas** y **24 columnas**. A continuación, se deta
 #### Observaciones:
 - **Valores nulos**: Hay columnas con valores nulos, como `age` (5,120 nulos) y `education` (1,807 nulos), que deben ser tratados antes del análisis.
 - **Tipos de datos**: Hay una mezcla de datos numéricos (`int64`, `float64`) y categóricos (`object`), lo que requiere diferentes estrategias de procesamiento según el análisis que se desee realizar.
-### Valores nulos en el dataset
 
+### Valores nulos en el dataset
 Al analizar las columnas, se detectó que algunas contienen valores nulos. Esto se determinó comparando el número de valores no nulos en cada columna con el total de filas del dataset (**43,000 filas**). Las columnas con menos de 43,000 valores no nulos contienen valores nulos que deberán ser tratados antes del análisis.
 
 #### Ejemplo:
@@ -189,16 +189,17 @@ Se realizaron las siguientes conversiones para asegurar consistencia en los dato
 - **`age`**, **`housing`**, **`loan`** fueron convertidos de `float` a `int`.  
 - **`cons_price_idx`**, **`cons_conf_idx`**, **`euribor3m`**, **`nr_employed`** fueron convertidos de `object` a `float`.
 
-### 5️⃣ Reemplazo de valores nulos  
-Se manejaron los valores nulos en varias columnas importantes:  
-- **`education`**, **`job`**, y **`marital`** → reemplazados por `'sin especificar'`.  
-- **`age`** → valores nulos reemplazados con la **mediana**.  
-- **`euribor3m`** → valores nulos imputados con la **media**.  
+### 5️⃣ El Reemplazo de valores nulos se daje para mas adelante  
+Se manejaran los valores nulos en varias columnas importantes:  
+- **`education`**, **`job`**, y **`marital`** → reemplazados por `'unknown'`.  
+- **`age`** → los valores nulos se dejan como Nan de momento.  
+- **`euribor3m`** los valores nulos se dejan como Nan de momento.  
 - **`default`** → sigue teniendo un 20.89% de valores nulos, pendiente de tratamiento.
 
 ### 6️⃣ Revisión de variables categóricas  
 Se verificó que las variables categóricas estuvieran limpias y en formato adecuado.  
 - **`poutcome`**, **`job`**, **`marital`**, **`education`** → valores corregidos y en minúsculas para coherencia.
+- Aunque la columna poutcome debe ser eliminada en un futuro
 
 ### 💾 Guardado del dataset transformado  
 - Se guardó el dataset limpio en la carpeta **`data/`** con el nombre:  

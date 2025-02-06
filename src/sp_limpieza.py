@@ -101,4 +101,17 @@ def convertir_fecha(df, columna='date'):
     df['day'] = df[columna].dt.day.fillna(0).astype(int)
     return df
 
+
+def rellenar_nulos_categoricas(df, columnas):
+    """
+    Rellena los valores nulos de las columnas categóricas con 'unknown'.
+    Parámetros:
+    - df: DataFrame
+    - columnas: Lista de columnas categóricas a rellenar
+    Retorna:
+    - DataFrame con los nulos reemplazados por 'unknown'
+    """
+    df[columnas] = df[columnas].fillna('unknown')
+    return df
+
         

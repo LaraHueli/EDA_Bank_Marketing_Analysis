@@ -216,3 +216,36 @@ Se creó un script en la carpeta **`src/`** llamado **`sp_eda.py`**, donde se al
        numero_nulos = df.isnull().sum()
        porcentaje_nulos = (df.isnull().sum() / df.shape[0]) * 100
        return numero_nulos, porcentaje_nulos
+---
+
+## 🔎 Análisis de Datos
+
+### 🔹 **Gestión de Valores Nulos**
+Se identificaron y gestionaron valores nulos en columnas categóricas clave:
+
+| Columna   | Valores Nulos | Método de Imputación |
+|-----------|--------------|----------------------|
+| `job`     | 1.95%        | Rellenado con `"unknown"` |
+| `marital` | 0.20%        | Rellenado con `"unknown"` |
+| `education` | 4.20%      | Rellenado con `"unknown"` |
+
+El código implementado para esta transformación se encuentra en `sp_limpieza.py`, con la función `rellenar_nulos_categoricas(df, columnas)`, aplicada en `columnas_categoricas.ipynb` antes de generar las visualizaciones.
+
+---
+
+### 📊 **Visualización de Datos Categóricos**
+Se generaron gráficos de barras para cada columna categórica tras la limpieza de datos. Ahora incluyen la categoría `"unknown"` en los casos donde se imputaron valores nulos.
+
+- **`job`** → 12 categorías (se agregó `"unknown"`)
+- **`marital`** → 4 categorías (se agregó `"unknown"`)
+- **`education`** → 6 categorías (se agregó `"unknown"`)
+
+Los gráficos se encuentran en `columnas_categoricas.ipynb` y fueron generados con la función `graficar_categoricas(df)`, ubicada en `sp_visualizacion.py`.
+
+---
+
+### 💾 **Guardado de Datos**
+El dataset limpio y procesado se guardó en la carpeta `data` bajo el nombre `bank_limpio.csv`.  
+
+```python
+df_limpio.to_csv("../data/bank_limpio.csv", index=False)

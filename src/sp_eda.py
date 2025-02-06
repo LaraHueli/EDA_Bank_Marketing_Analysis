@@ -24,4 +24,6 @@ def analisis_general_cat(df):
             display(df[col].value_counts(normalize=True))  # Muestra distribución de valores
             display(df[col].describe())  # Resumen descriptivo de la columna categórica
             print("\n--------------------------------------")
+    print("\n📊 **Resumen Estadístico General:**")
+    display(df.describe(include="all").T)  # 🔥 Agrega esta línea para ver todas las columnas
 

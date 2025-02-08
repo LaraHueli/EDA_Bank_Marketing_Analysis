@@ -11,9 +11,9 @@ def graficar_categoricas(df):
         sns.countplot(data=df, x=col, hue=col, palette="viridis", order=df[col].value_counts().index, legend=False);
         plt.title(f"Distribución de {col}")
         plt.xticks(rotation=45)
-        plt.show()
+        plt.show(block=True)
         plt.pause(0.1)  # Pausa breve para procesar cada gráfico
-        plt.close('all')
+        plt.close()
 
 def graficar_poutcome_vs_y(df):
     """Grafica la relación entre `poutcome` y `y`"""
@@ -27,7 +27,7 @@ def graficar_poutcome_vs_y(df):
     plt.xlabel("poutcome")
     plt.ylabel("Proporción de `y`")
     plt.xticks(rotation=45)
-    plt.show()
+    plt.show(block=True)
     plt.pause(0.1)  # Pausa breve para procesar cada gráfico
     plt.close()
 
@@ -37,7 +37,7 @@ def graficar_boxplots(df, columnas_numericas):
         plt.figure(figsize=(6, 4))
         sns.boxplot(data=df, x=col, palette="coolwarm");
         plt.title(f"Boxplot de {col}")
-        plt.show()
+        plt.show(block=True)
         plt.pause(0.5)  # Pausa breve para procesar cada gráfico
         plt.close()
 
@@ -47,6 +47,6 @@ def graficar_histogramas(df, columnas_numericas):
         plt.figure(figsize=(6, 4))
         sns.histplot(df[col], bins=30, kde=True, color="blue");
         plt.title(f"Histograma de {col}")
-        plt.show()
+        plt.show(block=True)
         plt.pause(0.5)  # Pausa breve para procesar cada gráfico
         plt.close()

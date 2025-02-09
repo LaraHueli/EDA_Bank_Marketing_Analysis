@@ -243,7 +243,44 @@ Se generaron gráficos de barras para cada columna categórica tras la limpieza 
 
 Los gráficos se encuentran en `columnas_categoricas.ipynb` y fueron generados con la función `graficar_categoricas(df)`, ubicada en `sp_visualizacion.py`.
 
+
+### 📌 **4️⃣ Análisis Preliminar de Columnas Numéricas**
+
+#### 🔢 **Exploración de las columnas numéricas**
+Se realizó un análisis exploratorio sobre las columnas numéricas, examinando su distribución, valores atípicos y diferencias entre medidas de tendencia central.
+
+- Se calcularon estadísticas descriptivas usando:
+  ```python
+  df.describe().T
+
+- Se identificaron columnas con alta dispersión entre la media y la mediana.
+- Se visualizaron histogramas y boxplots para detectar outliers en variables clave.
+
+**Boxplots y distribución de los datos**
+- Para identificar valores atípicos en las variables numéricas, se crearon gráficos de caja (boxplots), lo que permitió:
+
+- Detectar columnas con valores extremos, como duration y campaign.
+**
+**Comparación de correlaciones**
+Se analizó la correlación entre variables numéricas para detectar relaciones significativas:
+
+Se utilizó df.corr() para calcular la matriz de correlaciones.
+Se generó un heatmap con Seaborn para visualizar las relaciones más relevantes.
+El código correspondiente a este análisis se encuentra en el script sp_visualizacion.py y los gráficos están almacenados en la carpeta results/.
+
+**Observaciones y Próximos Pasos**
+Algunas variables presentan alta correlación, lo que sugiere la necesidad de reducir la dimensionalidad en futuras fases del análisis.
+Se encontraron valores atípicos en duration y campaign, lo que requerirá un tratamiento especial.
+El análisis de outliers y su impacto en el modelo será evaluado en sesiones posteriores.
+**Actualización del Dataset**
+Tras el análisis de las columnas numéricas:
+
+Se documentaron las observaciones clave en el archivo notas_numericas.md.
+Se guardaron nuevas versiones de los gráficos en results/.
+El dataset actualizado sigue estando disponible como bank_limpio.csv en la carpeta data/.
 ---
+
+
 
 ### 💾 **Guardado de Datos**
 El dataset limpio y procesado se guardó en la carpeta `data` bajo el nombre `bank_limpio.csv`.  

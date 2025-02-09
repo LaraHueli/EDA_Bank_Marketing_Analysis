@@ -50,3 +50,36 @@ def graficar_histogramas(df, columnas_numericas):
         plt.show(block=True)
         plt.pause(0.5)  # Pausa breve para procesar cada gráfico
         plt.close()
+        
+def graficar_numericas(df, columna):
+    """
+    Crea un histograma + KDE para visualizar la distribución de una columna numérica.
+    También añade líneas para la media y la mediana.
+
+    Parámetros:
+    - df: DataFrame que contiene la columna.
+    - columna: str, nombre de la columna a visualizar.
+
+    Retorna:
+    - Gráfico de distribución.
+    """
+    plt.figure(figsize=(10, 5))
+    
+    # Histograma con KDE
+    sns.histplot(df[columna], kde=True, bins=30, color='royalblue', edgecolor='black', alpha=0.6)
+    
+    # Líneas de media y mediana
+    media = df[columna].mean()
+    mediana = df[columna].median()
+    
+    plt.axvline(media, color='red', linestyle='--', label=f'Media: {media:.2f}')
+    plt.axvline(mediana, color='green', linestyle='-', label=f'Mediana: {mediana:.2f}')
+    
+    # Títulos y leyenda
+    plt.title(f'Distribución de {columna}', fontsize=14)
+    plt.xlabel(columna)
+    plt.ylabel('Frecuencia')
+    plt.legend()
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    
+    plt.show()

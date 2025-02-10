@@ -260,6 +260,22 @@ Se realizó un análisis exploratorio sobre las columnas numéricas, examinando 
 - Para identificar valores atípicos en las variables numéricas, se crearon gráficos de caja (boxplots), lo que permitió:
 
 - Detectar columnas con valores extremos, como duration y campaign.
+
+## 🔹 Gestión de valores nulos
+
+Se realizó un análisis de valores nulos en el dataset y se tomaron las siguientes decisiones:
+
+✅ **Sustitución de nulos en columnas numéricas**:
+   - `age` → **Sustituido por la mediana** (38.0).
+   - `duration` → **Sustituido por la mediana** (179.0).
+   - Resto de columnas numéricas **se mantienen con NaN** para futuras decisiones.
+
+✅ **Sustitución de nulos en columnas categóricas**:
+   - Se reemplazaron valores nulos en variables categóricas con `'unknown'` para evitar la pérdida de información.
+
+Los cambios fueron implementados en el script `src/sp_limpieza.py` dentro de la función `rellenar_nulos_numericas`.
+
+
 **
 **Comparación de correlaciones**
 Se analizó la correlación entre variables numéricas para detectar relaciones significativas:

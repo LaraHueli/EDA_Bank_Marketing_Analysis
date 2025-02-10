@@ -119,4 +119,20 @@ def rellenar_nulos_categoricas(df, columnas):
     df[columnas] = df[columnas].fillna('unknown')
     return df
 
+def rellenar_nulos_numericas(df, columnas):
+    """
+    Rellena los valores nulos de las columnas numéricas con la mediana.
+
+    Parámetros:
+    - df: DataFrame
+    - columnas: Lista de columnas numéricas a rellenar
+
+    Retorna:
+    - DataFrame con los nulos reemplazados por la mediana
+    """
+    df = df.copy()  # Aseguramos que trabajamos con una copia y no con una vista
+    for col in columnas:
+        df.loc[:, col] = df[col].fillna(df[col].median())
+    
+    return df
         

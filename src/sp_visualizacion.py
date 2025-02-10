@@ -1,6 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import math
+
 
 def graficar_categoricas(df):
     """Genera gráficos de barras para cada columna categórica"""
@@ -31,15 +33,29 @@ def graficar_poutcome_vs_y(df):
     plt.pause(0.1)  # Pausa breve para procesar cada gráfico
     plt.close()
 
-def graficar_boxplots(df, columnas_numericas):
-    """Genera boxplots para detectar outliers en columnas numéricas"""
-    for col in columnas_numericas:
-        plt.figure(figsize=(6, 4))
-        sns.boxplot(data=df, x=col, palette="coolwarm");
-        plt.title(f"Boxplot de {col}")
-        plt.show(block=True)
-        plt.pause(0.5)  # Pausa breve para procesar cada gráfico
-        plt.close()
+def graficar_boxplots(df):
+    """Genera boxplots para detectar outliers en columnas numéricas, mostrando dos gráficos por fila"""
+    
+    num_cols = df.select_dtypes(include=['number']).columns
+    total_cols = len(num_cols)
+    
+    filas = math.ceil(total_cols / 2)  # Definir cuántas filas se necesitan
+    
+    fig, axes = plt.subplots(filas, 2, figsize=(12, filas * 4))  # Dos gráficos por fila
+    axes = axes.flatten()  # Convertir a un solo array para iterar
+
+    for i, col in enumerate(num_cols):
+        sns.boxplot(data=df, x=df[col], ax=axes[i], color="royalblue",
+                    flierprops={'marker': 'o', 'markerfacecolor': 'red', 'markersize': 5})
+        axes[i].set_title(f"Boxplot de {col}", fontsize=12)
+        axes[i].grid(True, linestyle="--", alpha=0.7)
+
+    # Ocultar gráficos vacíos si hay un número impar de columnas
+    for j in range(i + 1, len(axes)):
+        fig.delaxes(axes[j])
+
+    plt.tight_layout()
+    plt.show()
 
 def graficar_histogramas(df, columnas_numericas):
     """Genera histogramas para visualizar la distribución de variables numéricas"""
@@ -51,35 +67,61 @@ def graficar_histogramas(df, columnas_numericas):
         plt.pause(0.5)  # Pausa breve para procesar cada gráfico
         plt.close()
         
-def graficar_numericas(df, columna):
-    """
-    Crea un histograma + KDE para visualizar la distribución de una columna numérica.
-    También añade líneas para la media y la mediana.
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
 
-    Parámetros:
-    - df: DataFrame que contiene la columna.
-    - columna: str, nombre de la columna a visualizar.
+def graficar_numericas(df, columna=None):
+    
+    if columna:
+        # Graficar solo una columna en un solo subplot
+        fig, ax = plt.subplots(1, 1, figsize=(7, 4))
+        sns.histplot(df[columna], kde=True, bins=25, ax=ax, color='royalblue', edgecolor='black', alpha=0.6)
+        
+        # Líneas de media y mediana
+        media = df[columna].mean()
+        mediana = df[columna].median()
+        ax.axvline(media, color='red', linestyle='--', label=f'Media: {media:.2f}')
+        ax.axvline(mediana, color='green', linestyle='-', label=f'Mediana: {mediana:.2f}')
+        
+        ax.set_title(f'Distribución de {columna}', fontsize=12)
+        ax.set_xlabel(columna, fontsize=10)
+        ax.set_ylabel('Frecuencia', fontsize=10)
+        ax.legend(fontsize=9)
+        ax.grid(axis='y', linestyle='--', alpha=0.7)
+        
+        plt.tight_layout()
+        plt.show()
+        return
+    
+    # Si no se especifica columna, graficar todas las columnas numéricas en subplots
+    columnas_numericas = df.select_dtypes(include=np.number).columns
+    num_columnas = len(columnas_numericas)
+    filas = (num_columnas // 2) + (num_columnas % 2)  # 2 gráficos por fila
 
-    Retorna:
-    - Gráfico de distribución.
-    """
-    plt.figure(figsize=(10, 5))
-    
-    # Histograma con KDE
-    sns.histplot(df[columna], kde=True, bins=30, color='royalblue', edgecolor='black', alpha=0.6)
-    
-    # Líneas de media y mediana
-    media = df[columna].mean()
-    mediana = df[columna].median()
-    
-    plt.axvline(media, color='red', linestyle='--', label=f'Media: {media:.2f}')
-    plt.axvline(mediana, color='green', linestyle='-', label=f'Mediana: {mediana:.2f}')
-    
-    # Títulos y leyenda
-    plt.title(f'Distribución de {columna}', fontsize=14)
-    plt.xlabel(columna)
-    plt.ylabel('Frecuencia')
-    plt.legend()
-    plt.grid(axis='y', linestyle='--', alpha=0.7)
-    
+    fig, axes = plt.subplots(filas, 2, figsize=(12, filas * 3.5))  
+    axes = axes.flatten()  
+
+    for i, col in enumerate(columnas_numericas):
+        sns.histplot(df[col], kde=True, bins=25, ax=axes[i], color='royalblue', edgecolor='black', alpha=0.6)
+        
+        # Líneas de media y mediana
+        media = df[col].mean()
+        mediana = df[col].median()
+        axes[i].axvline(media, color='red', linestyle='--', label=f'Media: {media:.2f}')
+        axes[i].axvline(mediana, color='green', linestyle='-', label=f'Mediana: {mediana:.2f}')
+        
+        axes[i].set_title(f'Distribución de {col}', fontsize=10)
+        axes[i].set_xlabel(col, fontsize=9)
+        axes[i].set_ylabel('Frecuencia', fontsize=9)
+        axes[i].legend(fontsize=8)
+        axes[i].grid(axis='y', linestyle='--', alpha=0.7)
+
+    # Ocultar ejes vacíos si hay un número impar de columnas
+    for j in range(i + 1, len(axes)):
+        fig.delaxes(axes[j])
+
+    plt.tight_layout()  
     plt.show()
+    
+   

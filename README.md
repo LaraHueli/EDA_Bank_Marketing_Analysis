@@ -112,13 +112,6 @@ El dataset contiene **43,000 filas** y **24 columnas**. A continuación, se deta
 
 ### Valores nulos en el dataset
 Al analizar las columnas, se detectó que algunas contienen valores nulos. Esto se determinó comparando el número de valores no nulos en cada columna con el total de filas del dataset (**43,000 filas**). Las columnas con menos de 43,000 valores no nulos contienen valores nulos que deberán ser tratados antes del análisis.
-
-#### Ejemplo:
-Algunas de las columnas con valores nulos identificadas son:
-- `age`: 37,880 valores no nulos (**5,120 nulos**).
-- `education`: 41,193 valores no nulos (**1,807 nulos**).
-- `default`: 34,019 valores no nulos (**8,981 nulos**).
- 
  
  ### Transformación del Dataset
  **Copia del dataset**  

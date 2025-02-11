@@ -276,23 +276,33 @@ Se realizó un análisis de valores nulos en el dataset y se tomaron las siguien
 Los cambios fueron implementados en el script `src/sp_limpieza.py` dentro de la función `rellenar_nulos_numericas`.
 
 
-**
-**Comparación de correlaciones**
-Se analizó la correlación entre variables numéricas para detectar relaciones significativas:
 
-Se utilizó df.corr() para calcular la matriz de correlaciones.
-Se generó un heatmap con Seaborn para visualizar las relaciones más relevantes.
-El código correspondiente a este análisis se encuentra en el script sp_visualizacion.py y los gráficos están almacenados en la carpeta results/.
+**Comparación de correlaciones**
+Correlaciones entre Variables
+
+✅ Calculamos la matriz de correlaciones entre las variables numéricas.
+✅ Identificamos relaciones destacadas como:
+
+emp_var_rate y euribor3m con una correlación de 0.82, lo que indica una fuerte relación entre estas variables.
+
+campaign y previous tienen una correlación muy baja, lo que sugiere que las interacciones previas con clientes no afectan significativamente el número de intentos en la campaña actual.
+
+ **Outliers (Valores Atípicos)**
+
+✅ Identificamos outliers en varias columnas, especialmente en duration, campaign y pdays.
+✅ No eliminamos los outliers, ya que podrían representar información valiosa para el análisis.
+✅ Mencionamos en el informe que, en futuros análisis, se puede considerar tratarlos dependiendo del enfoque del negocio.
 
 **Observaciones y Próximos Pasos**
-Algunas variables presentan alta correlación, lo que sugiere la necesidad de reducir la dimensionalidad en futuras fases del análisis.
+Algunas variables presentan alta correlación.
 Se encontraron valores atípicos en duration y campaign, lo que requerirá un tratamiento especial.
 El análisis de outliers y su impacto en el modelo será evaluado en sesiones posteriores.
-**Actualización del Dataset**
-Tras el análisis de las columnas numéricas:
 
-Se documentaron las observaciones clave en el archivo notas_numericas.md.
-Se guardaron nuevas versiones de los gráficos en results/.
+** Conclusiones principales:**
+✅ La duración de la última campaña (duration) presenta una gran variabilidad y valores extremos.
+✅ Algunas variables presentan correlaciones fuertes, lo que puede ayudar a definir estrategias de segmentación de clientes.
+✅ La presencia de outliers indica que existen casos excepcionales que podrían analizarse con más detalle.
+
 El dataset actualizado sigue estando disponible como bank_limpio.csv en la carpeta data/.
 ---
 

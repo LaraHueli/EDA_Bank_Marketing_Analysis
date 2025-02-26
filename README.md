@@ -1,12 +1,11 @@
 # 📊 Análisis de Marketing Bancario
 
 ## 📌 Descripción
-Este proyecto realiza un análisis exploratorio de datos para entender los patrones de comportamiento de los clientes bancarios. Su objetivo es identificar factores clave que influyen en las campañas de marketing.
+Este proyecto tiene como objetivo realizar un Análisis Exploratorio de Datos (EDA) sobre una campaña de marketing bancario. Se han aplicado diferentes técnicas de limpieza, transformación y análisis para obtener insights que ayuden a mejorar la efectividad de la campaña
 
 ### 📌 **1️⃣ Primera sesión: Configuración inicial**
-
 1. **Creación del repositorio en GitHub** y organización del entorno de trabajo.
-2. **Estructura de carpetas y archivos** (`.gitignore`, `venv`, `requirements.txt`, este ultimo incluido en gitignore).
+2. **Estructura de carpetas y archivos** (`.gitignore`, `venv`, `requirements.txt`).
 3. **Carga de datos brutos** en la carpeta `data/`.
 4. **Importación de librerías** necesarias para el análisis (`pandas`, `numpy`).
 
@@ -24,62 +23,29 @@ Este proyecto utiliza **Python 3.8** y requiere las siguientes bibliotecas:
 - `pandas`
 - `numpy`
 - `jupyter`
-
-
+-  `matplotlib`
+- `seaborn`
 ---  
 
-
 ### 📌 **2️⃣ Segunda sesión: Exploración Preliminar de Datos (EDA Preliminar)**
-
 #### 🔍 **Estudio previo de combinación de tablas**
-Antes de comenzar el análisis de `bank-additional` y `customer-details`, evaluamos la posible fusión de las tablas mediante la columna `id_`.
-
+🔄 Fusión de bank-additional.csv y customer-details.csv
+Para un análisis más completo, se decidió combinar ambos datasets en un único archivo denominado df_combinado.csv.
+Pasos realizados:
+✅ Se identificó la columna clave (id_) para la fusión.
+✅ Se aplicó un left merge para conservar todos los registros de bank-additional.csv.
+✅ Se eliminaron columnas redundantes (Income, Teenhome, etc.) y valores duplicados.
+✅ Se verificaron los tipos de datos y se ajustaron según correspondía.
 - **Análisis de los resultados**:
-  - `bank-additional` contiene **43,000 filas**, mientras que `customer-details` tiene **20,115**.
-  - Existen **7 ID en `customer-details`** que no están en `bank-additional`.
-  - Los datos de `customer-details` contienen información adicional como `income`, `teenhome`, `dt_customer`, etc.
-  
-- **Conclusión**: Dado que la fusión genera **demasiados valores nulos (`NaN`)**, decidimos **trabajar con los datasets por separado**.
+La combinación de los datasets permitió obtener una visión más amplia de la información, consolidando datos de campañas previas con características adicionales de los clientes. Se observaron algunas diferencias en la estructura de los datos, las cuales fueron corregidas para garantizar coherencia en el análisis.
 
-
-#### 🔍 **Descripción de las columnas**
-Este dataset contiene información bancaria y variables macroeconómicas relacionadas con clientes y campañas de marketing. A continuación, se detalla cada columna:
-
-| **Columna**          | **Descripción**                                                                |
-|----------------------|--------------------------------------------------------------------------------|
-| `Unnamed: 0`         | Índice sin nombre.                                                             |
-| `age`                | Edad del cliente.                                                              |
-| `job`                | Profesión del cliente.                                                         |
-| `marital`            | Estado civil del cliente (ej. "MARRIED", "SINGLE").                            |
-| `education`          | Nivel educativo del cliente (ej. "high.school", "basic.4y").                   |
-| `default`            | Indica si el cliente tiene un crédito en mora (0 = no, 1 = sí).                |
-| `housing`            | Indica si el cliente tiene un préstamo hipotecario (0 = no, 1 = sí).           |
-| `loan`               | Indica si el cliente tiene un préstamo personal (0 = no, 1 = sí).              |
-| `contact`            | Tipo de contacto utilizado (ej. "telephone", "cellular").                      |
-| `duration`           | Duración de la última llamada en segundos.                                     |
-| `campaign`           | Número de contactos realizados durante esta campaña.                           |
-| `pdays`              | Número de días desde el último contacto con el cliente.                        |
-| `previous`           | Número de contactos realizados antes de esta campaña.                          |
-| `poutcome`           | Resultado de la campaña de marketing anterior.                                 |
-| `emp.var.rate`       | Tasa de variación del empleo (variable macroeconómica).                        |
-| `cons.price.idx`     | Índice de precios al consumidor.                                               |
-| `cons.conf.idx`      | Índice de confianza del consumidor.                                            |
-| `euribor3m`          | Tasa de interés del Euribor a 3 meses.                                         |
-| `nr.employed`        | Número total de empleados (indicador macroeconómico).                          |
-| `y`                  | Variable objetivo:  si el cliente aceptó una oferta o producto ("yes"/"no").   |
-| `date`               | Fecha asociada al contacto o registro.                                         |
-| `latitude`           | Latitud del cliente, posiblemente vinculada a su ubicación geográfica.         |
-| `longitude`          | Longitud del cliente, posiblemente vinculada a su ubicación geográfica.        |
-| `id`                 | Identificador único del cliente.                                               |
-
----
+A partir de este dataset unificado, se procederá con un EDA preliminar.
 
 #### 📊 **Dimensiones e información del dataset**
-El dataset contiene **43,000 filas** y **24 columnas**. A continuación, se detalla la información clave sobre los tipos de datos y los valores no nulos de cada columna:
+El dataset contiene **43,000 filas** y **23 columnas**. A continuación, se detalla la información clave sobre los tipos de datos y los valores no nulos de cada columna:
 
 | **Columna**       | **Tipo de dato** | **Valores no nulos** | **Descripción**                                                        |
 |-------------------|------------------|----------------------|----------------------------------------------------------------------- |
-| `Unnamed: 0`      | int64            | 43,000               | Índice sin nombre, posiblemente un residuo de exportaciones previas.   |
 | `age`             | float64          | 37,880               | Edad del cliente (valores nulos = 5,120).                              |
 | `job`             | object           | 42,655               | Profesión del cliente (valores nulos = 345).                           |
 | `marital`         | object           | 42,915               | Estado civil del cliente (valores nulos = 85).                         |
@@ -104,21 +70,18 @@ El dataset contiene **43,000 filas** y **24 columnas**. A continuación, se deta
 | `longitude`       | float64          | 43,000               | Longitud del cliente (sin valores nulos).                              |
 | `id`              | object           | 43,000               | Identificador único del cliente.                                       |
 - **Número de filas**: 43,000
-- **Número de columnas**: 24
+- **Número de columnas**: 23
  
 #### Observaciones:
-- **Valores nulos**: Hay columnas con valores nulos, como `age` (5,120 nulos) y `education` (1,807 nulos), que deben ser tratados antes del análisis.
-- **Tipos de datos**: Hay una mezcla de datos numéricos (`int64`, `float64`) y categóricos (`object`), lo que requiere diferentes estrategias de procesamiento según el análisis que se desee realizar.
+-**Valores nulos**: Varias columnas presentan valores nulos, como age (5,120) y default (8,981), que se tratarán en la limpieza.
+-**Tipos de datos**: Existen columnas numéricas y categóricas que requieren ajustes en su formato antes del análisis.
+-**Duplicados**: No se han identificado filas duplicadas.
 
-### Valores nulos en el dataset
-Al analizar las columnas, se detectó que algunas contienen valores nulos. Esto se determinó comparando el número de valores no nulos en cada columna con el total de filas del dataset (**43,000 filas**). Las columnas con menos de 43,000 valores no nulos contienen valores nulos que deberán ser tratados antes del análisis.
- 
  ### Transformación del Dataset
  **Copia del dataset**  
-   Para proteger el dataset original, se creó una copia utilizando el método `.copy()` de pandas.
-**Eliminación de columnas innecesarias**  
-   Se eliminó la columna `Unnamed: 0` que no aportaba valor al análisis.
+Se creó una copia del dataset para evitar modificaciones accidentales en los datos originales utilizando .copy() de pandas.
 
+A partir de este análisis preliminar, se procederá a la limpieza de datos para preparar el dataset para un análisis más profundo.
 
 ### 📌 **3️⃣ Tercera sesión: Transformación del Dataset**
 
@@ -137,13 +100,13 @@ Como primer paso en la limpieza de datos, hemos desarrollado la función `eda_pr
 ### 1️⃣ Tipos de datos inconsistentes
 - Algunas columnas que deberían ser **numéricas** (`float64` o `int64`) están siendo interpretadas como **object** (string en Pandas).
 - **Ejemplos**: `cons_price_idx`, `cons_conf_idx` y `nr_employed` deberían ser `float64`, pero Pandas las considera `object`.
-- 🔹 **Acción a tomar**: Revisar y corregir el formato, eliminando posibles caracteres extraños (como comas en los números).
+- 🔹 **Acción tomada**: Se corrigió el formato eliminando caracteres extraños (como comas en los números) y convirtiendo estas columnas a `float64`.
 
 ### 2️⃣ Valores nulos (`isnull()`)
 #### Las columnas con más valores nulos:
 - `default`: **20.89%** de valores nulos.
 - `euribor3m`: **21.53%** de valores nulos.
-- 🔹 **Acción a tomar**: Decidir cómo tratarlos (imputación con media, mediana o eliminación de filas).
+- 🔹 **Pendiente de tratamiento**: Aún no se han reemplazado valores nulos. Se decidirá en una etapa posterior cómo manejarlos.
 
 ### 3️⃣ Filas duplicadas (`duplicated()`)
 - **No hay filas duplicadas** en el dataset, lo cual es positivo. ✅
@@ -154,12 +117,12 @@ Como primer paso en la limpieza de datos, hemos desarrollado la función `eda_pr
 - **Categoría menos común**: `student` con **903 registros**.
 
 #### **Columna `marital`**:
-- **Mayoría de clientes casados (`MARRIED`)**.
-- **Menos frecuentes**: `SINGLE` y `DIVORCED`.
+- **Mayoría de clientes casados (`married`)**.
+- **Menos frecuentes**: `single` y `divorced`.
 
 #### **Columna `education`**:
 - **Mayoría de clientes con título universitario (`university.degree`)**.
-- **Las categorías `basic.4y`, `basic.6y`, `basic.9y` son similares y podrían unificarse en una sola (`basic`).**
+- **Las categorías `basic.4y`, `basic.6y`, `basic.9y` fueron unificadas en una sola (`basic`).**
 
 ---
 
@@ -181,6 +144,10 @@ Se estandarizaron los valores de las siguientes columnas para evitar inconsisten
 Se realizaron las siguientes conversiones para asegurar consistencia en los datos:  
 - **`age`**, **`housing`**, **`loan`** fueron convertidos de `float` a `int`.  
 - **`cons_price_idx`**, **`cons_conf_idx`**, **`euribor3m`**, **`nr_employed`** fueron convertidos de `object` a `float`.
+
+---
+
+✅ **El dataset limpio ha sido guardado como `bank_limpio.csv` y está listo para análisis posteriores.**
 
 ### 5️⃣ El Reemplazo de valores nulos se daje para mas adelante  
 Se manejaran los valores nulos en varias columnas importantes:  

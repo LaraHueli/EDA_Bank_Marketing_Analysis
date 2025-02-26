@@ -6,7 +6,7 @@ Este proyecto realiza un análisis exploratorio de datos para entender los patro
 ### 📌 **1️⃣ Primera sesión: Configuración inicial**
 
 1. **Creación del repositorio en GitHub** y organización del entorno de trabajo.
-2. **Estructura de carpetas y archivos** (`.gitignore`, `venv`, `requirements.txt`).
+2. **Estructura de carpetas y archivos** (`.gitignore`, `venv`, `requirements.txt`, este ultimo incluido en gitignore).
 3. **Carga de datos brutos** en la carpeta `data/`.
 4. **Importación de librerías** necesarias para el análisis (`pandas`, `numpy`).
 

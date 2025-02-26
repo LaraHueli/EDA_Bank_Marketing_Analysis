@@ -25,6 +25,17 @@ Este proyecto utiliza **Python 3.8** y requiere las siguientes bibliotecas:
 - `jupyter`
 -  `matplotlib`
 - `seaborn`
+
+## 📚 Documentación de las Librerías Utilizadas
+
+Durante el análisis de datos utilizamos diversas librerías de Python que facilitaron la manipulación, limpieza y visualización de datos. A continuación, se incluyen enlaces a sus respectivas documentaciones:
+
+- [Pandas](https://pandas.pydata.org/docs/) - Manipulación y análisis de datos en estructuras tabulares.
+- [NumPy](https://numpy.org/doc/) - Operaciones matemáticas y manejo de arrays multidimensionales.
+- [Matplotlib](https://matplotlib.org/stable/contents.html) - Creación de gráficos estáticos, animados e interactivos.
+- [Seaborn](https://seaborn.pydata.org/) - Visualización de datos basada en Matplotlib con una interfaz más sencilla y atractiva.
+
+Esto permite a cualquier persona que revise el análisis acceder rápidamente a la documentación de cada librería para entender mejor su uso.
 ---  
 
 ### 📌 **2️⃣ Segunda sesión: Exploración Preliminar de Datos (EDA Preliminar)**

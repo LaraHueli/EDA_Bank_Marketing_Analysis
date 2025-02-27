@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+[.ShellClassInfo]
+IconResource=C:\WINDOWS\System32\SHELL32.dll,316
 
 # C extensions
 *.so

@@ -26,10 +26,10 @@ Este proyecto utiliza **Python 3.8** y requiere las siguientes bibliotecas:
 - `seaborn`
 ## 📚 Documentación de las Librerías Utilizadas
 Durante el análisis de datos utilizamos diversas librerías de Python que facilitaron la manipulación, limpieza y visualización de datos. A continuación, se incluyen enlaces a sus respectivas documentaciones:
-- [Pandas](https://pandas.pydata.org/docs/) - Manipulación y análisis de datos en estructuras tabulares.
-- [NumPy](https://numpy.org/doc/) - Operaciones matemáticas y manejo de arrays multidimensionales.
-- [Matplotlib](https://matplotlib.org/stable/contents.html) - Creación de gráficos estáticos, animados e interactivos.
-- [Seaborn](https://seaborn.pydata.org/) - Visualización de datos basada en Matplotlib con una interfaz más sencilla y atractiva.
+- [Pandas] (https://pandas.pydata.org/docs/) - Manipulación y análisis de datos en estructuras tabulares.
+- [NumPy] (https://numpy.org/doc/) - Operaciones matemáticas y manejo de arrays multidimensionales.
+- [Matplotlib] (https://matplotlib.org/stable/contents.html) - Creación de gráficos estáticos, animados e interactivos.
+- [Seaborn] (https://seaborn.pydata.org/) - Visualización de datos basada en Matplotlib con una interfaz más sencilla y atractiva.
   Esto permite a cualquier persona que revise el análisis acceder rápidamente a la documentación de cada librería para entender mejor su uso.
 ---  
 
@@ -80,9 +80,9 @@ El dataset contiene **43,000 filas** y **23 columnas**. A continuación, se deta
 La columna  `y`  es binaria, donde 0 representa que el cliente se suscribió (yes) y 1 que no se suscribió (no).
  
 #### Observaciones:
--**Valores nulos**: Varias columnas presentan valores nulos, como age (5,120) y default (8,981), que se tratarán en la limpieza.
--**Tipos de datos**: Existen columnas numéricas y categóricas que requieren ajustes en su formato antes del análisis.
--**Duplicados**: No se han identificado filas duplicadas.
+- **Valores nulos**: Varias columnas presentan valores nulos, como age (5,120) y default (8,981), que se tratarán en la limpieza.
+- **Tipos de datos**: Existen columnas numéricas y categóricas que requieren ajustes en su formato antes del análisis.
+- **Duplicados**: No se han identificado filas duplicadas.
 
  ### Transformación del Dataset
  **Copia del dataset**  
@@ -247,13 +247,31 @@ Tras completar la limpieza, se guardó el dataset con las modificaciones aplicad
 df_limpio.to_csv("data/bank_limpio.csv", index=False)
 ```
 
-### 📌 ** 5 Quinta sesion. Análisis Preliminar de Columnas Numéricas**
+### 📌 5️⃣ Quinta sesión: Análisis Preliminar de Columnas Numéricas
+
 
 #### 🔢 **Exploración de las columnas numéricas**
 Se realizó un análisis exploratorio sobre las columnas numéricas, examinando su distribución, valores atípicos y diferencias entre medidas de tendencia central.
+
+📌 **Garantía:**  
+Esto asegura que todas las transformaciones y ajustes en valores nulos **se reflejen correctamente** en el dataset final.
+
+### **5 Quinta Sesión: Análisis de Variables Numéricas**
+
+---
+
+## 🔢 **Exploración de las Columnas Numéricas**
+Se realizó un análisis exploratorio de las variables numéricas para comprender su distribución, detectar valores atípicos y evaluar su impacto en el análisis.
+
+📌 **Pasos realizados:**
+
 - Se calcularon estadísticas descriptivas usando:
-  ```python
-  df.describe().T
+
+ ```python
+df.describe().T
+```
+
+
 - Se identificaron columnas con alta dispersión entre la media y la mediana.
 - Se visualizaron histogramas y boxplots para detectar outliers en variables clave.
 
@@ -298,7 +316,154 @@ El dataset actualizado sigue estando disponible como bank_limpio.csv en la carpe
 ---
 
 ### 💾 **Guardado de Datos**
+
+  ```
+
+- Se identificaron columnas con alta dispersión entre la **media y la mediana**.
+- Se visualizaron **histogramas** y **boxplots** para detectar outliers en variables clave.
+
+👉 **Boxplots y Distribución de Datos**  
+Para identificar valores atípicos, se crearon gráficos de caja (**boxplots**), lo que permitió:
+
+- Detectar columnas con valores extremos, como **`duration`** y **`campaign`**.
+- Identificar patrones inusuales en variables como **`pdays`**, donde el valor **999** es recurrente.
+
+📌 **Hallazgos principales:**
+- **La edad (`age`) muestra una distribución centrada en 38 años**, con valores mínimos de 17 y máximos de 98.
+- **`pdays` presenta un valor atípico frecuente de 999**, lo que sugiere que representa clientes que no han sido contactados antes.
+- **`nr_employed` tiene valores atípicos, pero no es una variable de riesgo, ya que parece reflejar un ID o referencia interna.**
+
+---
+
+## 🔹 **Gestión de Valores Nulos**
+
+Se realizó un análisis de valores nulos en el dataset y se tomaron las siguientes decisiones:
+
+📌 **Sustitución de valores nulos en columnas numéricas:**
+
+| **Columna**  | **% de Nulos** | **Método de Imputación** | **Justificación** |
+|-------------|---------------|-------------------------|-------------------|
+| `age`       | 11.9%         | **Mediana (38.0)**      | La mediana es robusta ante outliers y representa mejor la distribución de la edad. |
+| `duration`  | 0.0%          | **Sin cambios**         | No hay valores nulos en esta columna. |
+| `pdays`     | 0.0%          | **Sin cambios**         | Aunque presenta valores atípicos, no tiene valores nulos. |
+| `previous`  | 0.0%          | **Sin cambios**         | Se mantiene sin modificaciones. |
+
+📌 **¿Por qué se usó la mediana en `age`?**
+- La **mediana** es menos sensible a los valores extremos que la media.
+- La distribución de la edad es **asimétrica**, por lo que la mediana es más representativa del valor central real.
+- Permite preservar la estructura de los datos sin sesgarlos hacia valores extremos.
+
+📌 **Implementación en código:**
+
+```python
+from src.sp_limpieza import rellenar_nulos_numericas
+df_limpio = rellenar_nulos_numericas(df_limpio, ["age"])
+```
+
+---
+
+## 🔢 **Detección de Outliers**
+
+Se utilizó el **Rango Intercuartil (IQR)** para identificar valores atípicos en cada variable.
+
+📌 **Cálculo del IQR:**
+
+```python
+Q1 = df_numericas.quantile(0.25)  # Primer cuartil (25%)
+Q3 = df_numericas.quantile(0.75)  # Tercer cuartil (75%)
+IQR = Q3 - Q1  # Rango intercuartil
+limite_inferior = Q1 - 1.5 * IQR
+limite_superior = Q3 + 1.5 * IQR
+outliers = (df_numericas < limite_inferior) | (df_numericas > limite_superior)
+outliers.sum()
+```
+
+📌 **Conclusión sobre outliers:**
+✅ **No se detectaron valores atípicos que sean preocupantes.**  
+✅ Aunque hay algunas variables con valores extremos, estos no afectan el análisis de manera significativa.  
+✅ **En futuros análisis, se podría evaluar si eliminarlos o categorizarlos para mejorar la interpretación.**  
+
+---
+
+## 🔢 **Matriz de Correlación y Análisis de Relaciones**
+
+Se generó la **matriz de correlación** para identificar relaciones entre variables.
+
+📌 **Hallazgos clave:**
+- **`previous` y `pdays` están altamente correlacionadas (-0.59)**  
+  - `pdays` indica **los días desde el último contacto** con el cliente.
+  - `previous` indica **el número de contactos previos** en la campaña.
+  - Esto sugiere que clientes con **pocos contactos anteriores tienen un `pdays` alto** y viceversa.
+
+📌 **Visualización en código:**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10,8))
+sns.heatmap(df_numericas.corr(), annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5)
+plt.title("Matriz de Correlaciones")
+plt.show()
+```
+
+---
+
+## 💾 **Guardado del Dataset**
+
+
 El dataset limpio y procesado se guardó en la carpeta `data` bajo el nombre `bank_limpio.csv`.  
+
+📌 **Código de guardado:**
 
 ```python
 df_limpio.to_csv("../data/bank_limpio.csv", index=False)
+```
+
+---
+
+## 📌 **Conclusiones Finales**
+✅ **La variable `age` fue imputada con la mediana (38 años) para evitar sesgo por valores extremos.**  
+✅ **Se detectaron outliers, pero no afectan significativamente el análisis.**  
+✅ **La matriz de correlación indica que `pdays` y `previous` están altamente relacionadas, lo que podría justificar su consolidación.**  
+✅ **El dataset actualizado sigue estando disponible como `bank_limpio.csv` en la carpeta `data/`.**  
+
+
+# 📌 Recomendaciones Basadas en el Análisis
+
+### 1️⃣ 📞 Optimización del Canal de Contacto
+- Se ha identificado que la mayoría de los clientes fueron contactados a través de **teléfonos móviles**.  
+- Dado que este canal es el más utilizado, se recomienda **priorizar las campañas a través de llamadas móviles** y explorar estrategias complementarias como **mensajes SMS o WhatsApp** para mejorar la tasa de respuesta.
+
+### 2️⃣ 🎓 Personalización Según Nivel Educativo
+- Se observó que los clientes con **educación secundaria y universitaria** representan la mayor proporción.  
+- Esto sugiere que las estrategias de marketing pueden enfocarse en este grupo, **adaptando el lenguaje y las ofertas** para que sean más atractivas a personas con estos niveles educativos.
+
+### 3️⃣ 📊 Segmentación por Edad
+- La edad de los clientes varía ampliamente, pero existen grupos predominantes.  
+- Sería beneficioso analizar con más detalle qué **segmentos de edad responden mejor a las campañas**, permitiendo personalizar ofertas y mensajes según el perfil generacional.
+
+### 4️⃣ 💍 Estado Civil y Perfil del Cliente
+- La mayoría de los clientes contactados están **casados**.  
+- Dado que las decisiones financieras pueden verse influenciadas por la situación familiar, sería interesante explorar si este grupo tiene **mayor disposición** a contratar ciertos productos financieros (como hipotecas o planes de ahorro familiares).
+
+### 5️⃣ 📈 Optimización de la Duración de la Llamada
+- Se encontró que la variable **duration** (duración de la llamada) tiene un impacto significativo en la respuesta del cliente.  
+- Se recomienda analizar con más profundidad qué **duraciones óptimas** maximizan la conversión, para ajustar los scripts de llamadas y mejorar la eficiencia del equipo de ventas.
+
+### 6️⃣ 🔁 Frecuencia de Contacto y Respuesta
+- La variable **campaign** mostró que algunos clientes fueron contactados varias veces en la misma campaña.  
+- Se sugiere evaluar cuál es el **número óptimo de intentos de contacto** para evitar insistencia excesiva y fatiga del cliente.
+
+### 7️⃣ 📅 Análisis Temporal de la Campaña
+- Se podría realizar un análisis de estacionalidad para identificar **los mejores meses o días de la semana** para contactar clientes, mejorando la efectividad de la campaña.
+
+---
+
+## 🏆 **Conclusión Final**
+Este análisis ha permitido identificar **patrones clave** en los clientes contactados, lo que facilita la **segmentación estratégica** y la mejora de las campañas de marketing.  
+
+La personalización de los mensajes según **edad, estado civil, nivel educativo y canal de contacto** puede **incrementar las tasas de conversión** y optimizar los recursos de la campaña.  
+
+
+

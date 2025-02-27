@@ -1,9 +1,9 @@
 # 📊 Análisis de Marketing Bancario
 
-## 📌 Descripción
+##  Descripción
 Este proyecto tiene como objetivo realizar un Análisis Exploratorio de Datos (EDA) sobre una campaña de marketing bancario. Se han aplicado diferentes técnicas de limpieza, transformación y análisis para obtener insights que ayuden a mejorar la efectividad de la campaña
 
-### 📌 **1️⃣ Primera sesión: Configuración inicial**
+###  **1️⃣ Primera sesión: Configuración inicial**
 1. **Creación del repositorio en GitHub** y organización del entorno de trabajo.
 2. **Estructura de carpetas y archivos** (`.gitignore`, `venv`, `requirements.txt`).
 3. **Carga de datos brutos** en la carpeta `data/`.
@@ -38,7 +38,7 @@ Durante el análisis de datos utilizamos diversas librerías de Python que facil
 Esto permite a cualquier persona que revise el análisis acceder rápidamente a la documentación de cada librería para entender mejor su uso.
 ---  
 
-### 📌 **2️⃣ Segunda sesión: Exploración Preliminar de Datos (EDA Preliminar)**
+###  **2️⃣ Segunda sesión: Exploración Preliminar de Datos (EDA Preliminar)**
 #### 🔍 **Estudio previo de combinación de tablas**
 🔄 Fusión de bank-additional.csv y customer-details.csv
 Para un análisis más completo, se decidió combinar ambos datasets en un único archivo denominado df_combinado.csv.
@@ -82,6 +82,7 @@ El dataset contiene **43,000 filas** y **23 columnas**. A continuación, se deta
 | `id`              | object           | 43,000               | Identificador único del cliente.                                       |
 - **Número de filas**: 43,000
 - **Número de columnas**: 23
+La columna  `y`  es binaria, donde 0 representa que el cliente se suscribió (yes) y 1 que no se suscribió (no).
  
 #### Observaciones:
 -**Valores nulos**: Varias columnas presentan valores nulos, como age (5,120) y default (8,981), que se tratarán en la limpieza.
@@ -94,7 +95,7 @@ Se creó una copia del dataset para evitar modificaciones accidentales en los da
 
 A partir de este análisis preliminar, se procederá a la limpieza de datos para preparar el dataset para un análisis más profundo.
 
-### 📌 **3️⃣ Tercera sesión: Transformación del Dataset**
+###  **3️⃣ Tercera sesión: Transformación del Dataset**
 
 ### 🔍 Creación de la función `eda_preliminar`
 Como primer paso en la limpieza de datos, hemos desarrollado la función `eda_preliminar`, la cual nos permite obtener una visión general del dataset. Esta función realiza las siguientes tareas:
@@ -135,7 +136,7 @@ Como primer paso en la limpieza de datos, hemos desarrollado la función `eda_pr
 - **Mayoría de clientes con título universitario (`university.degree`)**.
 - **Las categorías `basic.4y`, `basic.6y`, `basic.9y` fueron unificadas en una sola (`basic`).**
 
----
+
 
 ## 🔄 Limpieza y Preprocesamiento de Datos
 
@@ -156,66 +157,139 @@ Se realizaron las siguientes conversiones para asegurar consistencia en los dato
 - **`age`**, **`housing`**, **`loan`** fueron convertidos de `float` a `int`.  
 - **`cons_price_idx`**, **`cons_conf_idx`**, **`euribor3m`**, **`nr_employed`** fueron convertidos de `object` a `float`.
 
----
+
 
 ✅ **El dataset limpio ha sido guardado como `bank_limpio.csv` y está listo para análisis posteriores.**
 
-### 5️⃣ El Reemplazo de valores nulos se daje para mas adelante  
-Se manejaran los valores nulos en varias columnas importantes:  
-- **`education`**, **`job`**, y **`marital`** → reemplazados por `'unknown'`.  
-- **`age`** → los valores nulos se dejan como Nan de momento.  
-- **`euribor3m`** los valores nulos se dejan como Nan de momento.  
-- **`default`** → sigue teniendo un 20.89% de valores nulos, pendiente de tratamiento.
+###  **4️⃣ Cuarta sesión: Análisis de Variables Categóricas**
 
-### 6️⃣ Revisión de variables categóricas  
-Se verificó que las variables categóricas estuvieran limpias y en formato adecuado.  
-- **`poutcome`**, **`job`**, **`marital`**, **`education`** → valores corregidos y en minúsculas para coherencia.
-- Aunque la columna poutcome debe ser eliminada en un futuro
+## 🔢 1 Cálculo de Valores Nulos
+Antes de tomar decisiones sobre la imputación o eliminación de datos, se calculó el porcentaje de valores nulos en cada columna categórica.
 
-### 💾 Guardado del dataset transformado  
-- Se guardó el dataset limpio en la carpeta **`data/`** con el nombre:  
-  - **`bank_limpio.csv`**
+Para esto, se utilizó la función `calcular_porcentaje_nulos(df)`, ubicada en `sp_eda.py`, que:
 
-## 🔍 Análisis de Columnas Categóricas
+- **Número total de valores nulos por columna.**
+- **Porcentaje de valores nulos en relación con el total de filas del dataset.**
 
-###  Creación del script `sp_eda.py`
-Se creó un script en la carpeta **`src/`** llamado **`sp_eda.py`**, donde se almacenan funciones reutilizables para el análisis exploratorio de datos.
+🔹 **Ejemplo de uso:**
+```python
+from src.sp_eda import calcular_porcentaje_nulos
+porcentaje_nulos = calcular_porcentaje_nulos(df)
+print(porcentaje_nulos)
+```
 
-#### 📌 **Funciones creadas en `sp_eda.py`**:
-1. **`calcular_nulos(df)`** ➝ Calcula el número y porcentaje de valores nulos en cada columna.
-   ```python
-   def calcular_nulos(df):
-       numero_nulos = df.isnull().sum()
-       porcentaje_nulos = (df.isnull().sum() / df.shape[0]) * 100
-       return numero_nulos, porcentaje_nulos
+### 🔍 Hallazgos iniciales:
+
+- `poutcome` tenía un **86%** de valores nulos, lo que motivó su eliminación.
+- `education`, `job` y `marital` tenían valores nulos menores al **5%**, por lo que se optó por imputarlos en lugar de eliminarlos.
+
+
+
+## 🔢 2 Gestión de Valores Nulos
+Tras analizar los valores nulos, se decidió:
+
+| **Columna**  | **% de Nulos** | **Método de Imputación** | **Justificación** |
+|-------------|--------------|------------------|----------------------------|
+| `job`       | 1.95%        | "unknown"       | No se identificó un patrón claro, se agregó "unknown" como categoría adicional. |
+| `marital`   | 0.20%        | "unknown"       | La baja cantidad de nulos permite una imputación sin impacto significativo en la distribución. |
+| `education` | 4.20%        | "unknown"       | Se decidió agrupar los valores nulos en "unknown" para evitar sesgar los datos. |
+| `poutcome`  | 86%          | Eliminada        | El alto porcentaje de nulos hacía que la variable no aportara información relevante. |
+
+📌 **Justificación del Relleno con "unknown":**
+
+- No había una relación clara entre los valores nulos y otras variables.
+- Se evaluó imputar los valores con la moda, pero en `job` y `education` había una alta variabilidad, lo que podría distorsionar los resultados.
+- Se probó la asignación basada en frecuencias, pero la distribución no era homogénea.
+- Se optó por "unknown" como una categoría adicional para no sesgar el análisis.
+
+Esta transformación se implementó en `sp_limpieza.py`, dentro de la función `rellenar_nulos_categoricas(df, columnas)`, aplicada en `columnas_categoricas.ipynb`.
+
+🔹 **Ejemplo de uso:**
+```python
+from src.sp_limpieza import rellenar_nulos_categoricas
+df_limpio = rellenar_nulos_categoricas(df, ["job", "marital", "education"])
+```
+
+## 🔢 3 Análisis de Variables Categóricas
+Se realizó una exploración detallada de cada variable categórica, utilizando medidas estadísticas y visualizaciones.
+
+### 🌟 Estadísticas Descriptivas
+Para cada variable categórica, se calcularon:
+
+- **Moda** (valor más frecuente).
+- **Número de valores únicos.**
+- **Frecuencia relativa de cada categoría.**
+
+| **Variable** | **Moda**  | **Valores Únicos** |
+|-------------|----------|----------------|
+| `job`       | admin.   | 12             |
+| `marital`   | married  | 4              |
+| `education` | secondary | 6             |
+| `contact`   | cellular | 2              |
+
+🔹 **Ejemplo de uso en el análisis exploratorio:**
+```python
+from src.sp_eda import analisis_general_cat
+analisis_general_cat(df_limpio)
+```
+
+
+## 🌍 4 Visualización de Variables Categóricas
+Para visualizar la distribución de las categorías, se creó la función `graficar_categoricas(df)`, ubicada en `sp_visualizacion.py`.
+
+🔹 **Ejemplo de uso:**
+```python
+from src.sp_visualizacion import graficar_categoricas
+graficar_categoricas(df_limpio)
+```
+Los gráficos generados están en `columnas_categoricas.ipynb`.
+
+
+## 🔍 5 Conclusiones Tras la Visualización
+📌 **Análisis de los gráficos generados:**
+
+- **`job`**: La ocupación más frecuente es "admin.", seguida de "blue-collar" y "technician". Esto indica una fuerte representación de trabajadores administrativos y técnicos.
+- **`marital`**: El estado civil más común es "married", lo que podría ser relevante si queremos analizar la estabilidad económica de los clientes.
+- **`education`**: La mayoría de los clientes tienen educación secundaria o universitaria, lo que puede influir en su perfil financiero.
+- **`contact`**: Se observa que la mayoría de las campañas se realizaron a través de teléfonos celulares, lo que puede influir en la tasa de respuesta.
+
+📌 **Implicaciones para el análisis:**
+
+- La alta presencia de clientes casados y con educación media/alta podría influir en su respuesta a productos financieros.
+- El uso de celulares como principal medio de contacto sugiere que las campañas digitales pueden ser más efectivas.
+- La segmentación por tipo de ocupación podría ayudar a personalizar las estrategias de marketing.
+
+
+### 6️⃣ Eliminación de `poutcome`
+Dado que la variable `poutcome` tenía un **86%** de valores nulos, se decidió eliminarla. Antes de tomar esta decisión, se evaluó su impacto en la variable objetivo (`y`):
+
+- Se generó una tabla de frecuencias cruzadas con:
+  ```python
+  pd.crosstab(df['poutcome'], df['y'], normalize='index')
+  ```
+- Se identificó que los datos disponibles en `poutcome` no influían significativamente en la variable `y`.
+
+📌 **Conclusión:**  
+La eliminación de `poutcome` **no afectó el análisis**, ya que la cantidad de datos faltantes sesgaba la distribución.
+
 ---
 
-## 🔎 Análisis de Datos
+### 7️⃣ Guardado del Dataset Limpio
+Tras completar la limpieza, se guardó el dataset con las modificaciones aplicadas:
 
-### 🔹 **Gestión de Valores Nulos**
-Se identificaron y gestionaron valores nulos en columnas categóricas clave:
+```python
+df_limpio.to_csv("data/bank_limpio.csv", index=False)
+```
 
-| Columna   | Valores Nulos | Método de Imputación |
-|-----------|--------------|----------------------|
-| `job`     | 1.95%        | Rellenado con `"unknown"` |
-| `marital` | 0.20%        | Rellenado con `"unknown"` |
-| `education` | 4.20%      | Rellenado con `"unknown"` |
-
-El código implementado para esta transformación se encuentra en `sp_limpieza.py`, con la función `rellenar_nulos_categoricas(df, columnas)`, aplicada en `columnas_categoricas.ipynb` antes de generar las visualizaciones.
-
----
-
-### 📊 **Visualización de Datos Categóricos**
-Se generaron gráficos de barras para cada columna categórica tras la limpieza de datos. Ahora incluyen la categoría `"unknown"` en los casos donde se imputaron valores nulos.
-
-- **`job`** → 12 categorías (se agregó `"unknown"`)
-- **`marital`** → 4 categorías (se agregó `"unknown"`)
-- **`education`** → 6 categorías (se agregó `"unknown"`)
-
-Los gráficos se encuentran en `columnas_categoricas.ipynb` y fueron generados con la función `graficar_categoricas(df)`, ubicada en `sp_visualizacion.py`.
+📌 **Garantía:**  
+Esto asegura que todas las transformaciones y ajustes en valores nulos **se reflejen correctamente** en el dataset final.
 
 
-### 📌 **4️⃣ Análisis Preliminar de Columnas Numéricas**
+
+
+
+
+### 📌 ** 5 Quinta sesion. Análisis Preliminar de Columnas Numéricas**
 
 #### 🔢 **Exploración de las columnas numéricas**
 Se realizó un análisis exploratorio sobre las columnas numéricas, examinando su distribución, valores atípicos y diferencias entre medidas de tendencia central.

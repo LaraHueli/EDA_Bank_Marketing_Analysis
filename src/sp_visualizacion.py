@@ -3,19 +3,24 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import math
 
-
 def graficar_categoricas(df):
-    """Genera gráficos de barras para cada columna categórica"""
-    categorical_cols = df.select_dtypes(include=['object']).columns
+    """Genera gráficos de barras para todas las columnas categóricas sin limitación de categorías."""
+    # Seleccionamos solo columnas categóricas, excluyendo 'id' si existe
+    categorical_cols = [col for col in df.select_dtypes(include=['object']).columns if col != 'id']
 
     for col in categorical_cols:
-        plt.figure(figsize=(8, 4))
-        sns.countplot(data=df, x=col, hue=col, palette="viridis", order=df[col].value_counts().index, legend=False);
+        plt.figure(figsize=(10, 5))
+
+        # Reemplazar valores nulos para evitar errores
+        df[col] = df[col].fillna("desconocido")
+
+        sns.countplot(data=df, x=col, palette="viridis",
+                      order=df[col].value_counts().index)  # Mostrar todas las categorías
+
         plt.title(f"Distribución de {col}")
         plt.xticks(rotation=45)
-        plt.show(block=True)
-        plt.pause(0.1)  # Pausa breve para procesar cada gráfico
-        plt.close()
+        plt.show()  # Mostrar cada gráfico antes de pasar al siguiente
+        
 
 def graficar_poutcome_vs_y(df):
     """Grafica la relación entre `poutcome` y `y`"""

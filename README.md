@@ -17,7 +17,6 @@ Este proyecto tiene como objetivo realizar un Análisis Exploratorio de Datos (E
 📁 results/      # Gráficos y conclusiones
 📄 README.md     # Descripción del proyecto
 ```
-
 ## 🛠 Requerimientos
 Este proyecto utiliza **Python 3.8** y requiere las siguientes bibliotecas:
 - `pandas`
@@ -25,17 +24,13 @@ Este proyecto utiliza **Python 3.8** y requiere las siguientes bibliotecas:
 - `jupyter`
 -  `matplotlib`
 - `seaborn`
-
 ## 📚 Documentación de las Librerías Utilizadas
-
 Durante el análisis de datos utilizamos diversas librerías de Python que facilitaron la manipulación, limpieza y visualización de datos. A continuación, se incluyen enlaces a sus respectivas documentaciones:
-
 - [Pandas](https://pandas.pydata.org/docs/) - Manipulación y análisis de datos en estructuras tabulares.
 - [NumPy](https://numpy.org/doc/) - Operaciones matemáticas y manejo de arrays multidimensionales.
 - [Matplotlib](https://matplotlib.org/stable/contents.html) - Creación de gráficos estáticos, animados e interactivos.
 - [Seaborn](https://seaborn.pydata.org/) - Visualización de datos basada en Matplotlib con una interfaz más sencilla y atractiva.
-
-Esto permite a cualquier persona que revise el análisis acceder rápidamente a la documentación de cada librería para entender mejor su uso.
+  Esto permite a cualquier persona que revise el análisis acceder rápidamente a la documentación de cada librería para entender mejor su uso.
 ---  
 
 ###  **2️⃣ Segunda sesión: Exploración Preliminar de Datos (EDA Preliminar)**
@@ -108,56 +103,45 @@ Como primer paso en la limpieza de datos, hemos desarrollado la función `eda_pr
 - Muestra la distribución de valores (`value_counts()`) en las variables categóricas.
 
 ## 📊 Resultados del `eda_preliminar`
-
-### 1️⃣ Tipos de datos inconsistentes
+### Tipos de datos inconsistentes
 - Algunas columnas que deberían ser **numéricas** (`float64` o `int64`) están siendo interpretadas como **object** (string en Pandas).
 - **Ejemplos**: `cons_price_idx`, `cons_conf_idx` y `nr_employed` deberían ser `float64`, pero Pandas las considera `object`.
 - 🔹 **Acción tomada**: Se corrigió el formato eliminando caracteres extraños (como comas en los números) y convirtiendo estas columnas a `float64`.
 
-### 2️⃣ Valores nulos (`isnull()`)
+### Valores nulos (`isnull()`)
 #### Las columnas con más valores nulos:
 - `default`: **20.89%** de valores nulos.
 - `euribor3m`: **21.53%** de valores nulos.
 - 🔹 **Pendiente de tratamiento**: Aún no se han reemplazado valores nulos. Se decidirá en una etapa posterior cómo manejarlos.
 
-### 3️⃣ Filas duplicadas (`duplicated()`)
+### Filas duplicadas (`duplicated()`)
 - **No hay filas duplicadas** en el dataset, lo cual es positivo. ✅
 
-### 4️⃣ Distribución de valores (`value_counts()`)
+### Distribución de valores (`value_counts()`)
 #### **Columna `job`**:
 - **Categoría más común**: `admin.` con **10,873 registros**.
 - **Categoría menos común**: `student` con **903 registros**.
-
 #### **Columna `marital`**:
 - **Mayoría de clientes casados (`married`)**.
 - **Menos frecuentes**: `single` y `divorced`.
-
 #### **Columna `education`**:
 - **Mayoría de clientes con título universitario (`university.degree`)**.
 - **Las categorías `basic.4y`, `basic.6y`, `basic.9y` fueron unificadas en una sola (`basic`).**
 
-
-
 ## 🔄 Limpieza y Preprocesamiento de Datos
-
-### 1️⃣ Conversión de valores a minúsculas  
+### Conversión de valores a minúsculas  
 Se estandarizaron los valores de las siguientes columnas para evitar inconsistencias en las categorías:  
 - **`job`**, **`marital`**, **`contact`**, **`education`**.
-
-### 2️⃣ Unificación de categorías  
+### Unificación de categorías  
 - En **`education`**, las categorías **`basic.4y`**, **`basic.6y`**, y **`basic.9y`** fueron unificadas en **`basic`** para simplificación.  
 - Se corrigieron inconsistencias en **`poutcome`** para garantizar uniformidad.  
-
-### 3️⃣ Eliminación de columnas irrelevantes  
+### Eliminación de columnas irrelevantes  
 - Se eliminaron **`latitude`** y **`longitude`** por no aportar valor relevante al análisis.  
 - Se eliminó **`date`** tras extraer **`year`**, **`month`** y **`day`** como variables separadas.
-
-### 4️⃣ Transformación de tipos de datos  
+### Transformación de tipos de datos  
 Se realizaron las siguientes conversiones para asegurar consistencia en los datos:  
 - **`age`**, **`housing`**, **`loan`** fueron convertidos de `float` a `int`.  
-- **`cons_price_idx`**, **`cons_conf_idx`**, **`euribor3m`**, **`nr_employed`** fueron convertidos de `object` a `float`.
-
-
+- **`cons_price_idx`**, **`cons_conf_idx`**, **`euribor3m`**, **`nr_employed`** fueron convertidos de `object` a `float`
 
 ✅ **El dataset limpio ha sido guardado como `bank_limpio.csv` y está listo para análisis posteriores.**
 
@@ -165,9 +149,7 @@ Se realizaron las siguientes conversiones para asegurar consistencia en los dato
 
 ## 🔢 1 Cálculo de Valores Nulos
 Antes de tomar decisiones sobre la imputación o eliminación de datos, se calculó el porcentaje de valores nulos en cada columna categórica.
-
 Para esto, se utilizó la función `calcular_porcentaje_nulos(df)`, ubicada en `sp_eda.py`, que:
-
 - **Número total de valores nulos por columna.**
 - **Porcentaje de valores nulos en relación con el total de filas del dataset.**
 
@@ -177,17 +159,12 @@ from src.sp_eda import calcular_porcentaje_nulos
 porcentaje_nulos = calcular_porcentaje_nulos(df)
 print(porcentaje_nulos)
 ```
-
 ### 🔍 Hallazgos iniciales:
-
 - `poutcome` tenía un **86%** de valores nulos, lo que motivó su eliminación.
 - `education`, `job` y `marital` tenían valores nulos menores al **5%**, por lo que se optó por imputarlos en lugar de eliminarlos.
 
-
-
 ## 🔢 2 Gestión de Valores Nulos
 Tras analizar los valores nulos, se decidió:
-
 | **Columna**  | **% de Nulos** | **Método de Imputación** | **Justificación** |
 |-------------|--------------|------------------|----------------------------|
 | `job`       | 1.95%        | "unknown"       | No se identificó un patrón claro, se agregó "unknown" como categoría adicional. |
@@ -196,14 +173,11 @@ Tras analizar los valores nulos, se decidió:
 | `poutcome`  | 86%          | Eliminada        | El alto porcentaje de nulos hacía que la variable no aportara información relevante. |
 
 📌 **Justificación del Relleno con "unknown":**
-
 - No había una relación clara entre los valores nulos y otras variables.
 - Se evaluó imputar los valores con la moda, pero en `job` y `education` había una alta variabilidad, lo que podría distorsionar los resultados.
 - Se probó la asignación basada en frecuencias, pero la distribución no era homogénea.
 - Se optó por "unknown" como una categoría adicional para no sesgar el análisis.
-
 Esta transformación se implementó en `sp_limpieza.py`, dentro de la función `rellenar_nulos_categoricas(df, columnas)`, aplicada en `columnas_categoricas.ipynb`.
-
 🔹 **Ejemplo de uso:**
 ```python
 from src.sp_limpieza import rellenar_nulos_categoricas
@@ -212,14 +186,11 @@ df_limpio = rellenar_nulos_categoricas(df, ["job", "marital", "education"])
 
 ## 🔢 3 Análisis de Variables Categóricas
 Se realizó una exploración detallada de cada variable categórica, utilizando medidas estadísticas y visualizaciones.
-
 ### 🌟 Estadísticas Descriptivas
 Para cada variable categórica, se calcularon:
-
 - **Moda** (valor más frecuente).
 - **Número de valores únicos.**
 - **Frecuencia relativa de cada categoría.**
-
 | **Variable** | **Moda**  | **Valores Únicos** |
 |-------------|----------|----------------|
 | `job`       | admin.   | 12             |
@@ -233,7 +204,6 @@ from src.sp_eda import analisis_general_cat
 analisis_general_cat(df_limpio)
 ```
 
-
 ## 🌍 4 Visualización de Variables Categóricas
 Para visualizar la distribución de las categorías, se creó la función `graficar_categoricas(df)`, ubicada en `sp_visualizacion.py`.
 
@@ -244,17 +214,14 @@ graficar_categoricas(df_limpio)
 ```
 Los gráficos generados están en `columnas_categoricas.ipynb`.
 
-
 ## 🔍 5 Conclusiones Tras la Visualización
 📌 **Análisis de los gráficos generados:**
-
 - **`job`**: La ocupación más frecuente es "admin.", seguida de "blue-collar" y "technician". Esto indica una fuerte representación de trabajadores administrativos y técnicos.
 - **`marital`**: El estado civil más común es "married", lo que podría ser relevante si queremos analizar la estabilidad económica de los clientes.
 - **`education`**: La mayoría de los clientes tienen educación secundaria o universitaria, lo que puede influir en su perfil financiero.
 - **`contact`**: Se observa que la mayoría de las campañas se realizaron a través de teléfonos celulares, lo que puede influir en la tasa de respuesta.
 
 📌 **Implicaciones para el análisis:**
-
 - La alta presencia de clientes casados y con educación media/alta podría influir en su respuesta a productos financieros.
 - El uso de celulares como principal medio de contacto sugiere que las campañas digitales pueden ser más efectivas.
 - La segmentación por tipo de ocupación podría ayudar a personalizar las estrategias de marketing.
@@ -262,7 +229,6 @@ Los gráficos generados están en `columnas_categoricas.ipynb`.
 
 ### 6️⃣ Eliminación de `poutcome`
 Dado que la variable `poutcome` tenía un **86%** de valores nulos, se decidió eliminarla. Antes de tomar esta decisión, se evaluó su impacto en la variable objetivo (`y`):
-
 - Se generó una tabla de frecuencias cruzadas con:
   ```python
   pd.crosstab(df['poutcome'], df['y'], normalize='index')
@@ -281,50 +247,32 @@ Tras completar la limpieza, se guardó el dataset con las modificaciones aplicad
 df_limpio.to_csv("data/bank_limpio.csv", index=False)
 ```
 
-📌 **Garantía:**  
-Esto asegura que todas las transformaciones y ajustes en valores nulos **se reflejen correctamente** en el dataset final.
-
-
-
-
-
-
 ### 📌 ** 5 Quinta sesion. Análisis Preliminar de Columnas Numéricas**
 
 #### 🔢 **Exploración de las columnas numéricas**
 Se realizó un análisis exploratorio sobre las columnas numéricas, examinando su distribución, valores atípicos y diferencias entre medidas de tendencia central.
-
 - Se calcularon estadísticas descriptivas usando:
   ```python
   df.describe().T
-
 - Se identificaron columnas con alta dispersión entre la media y la mediana.
 - Se visualizaron histogramas y boxplots para detectar outliers en variables clave.
 
 **Boxplots y distribución de los datos**
 - Para identificar valores atípicos en las variables numéricas, se crearon gráficos de caja (boxplots), lo que permitió:
-
 - Detectar columnas con valores extremos, como duration y campaign.
 
 ## 🔹 Gestión de valores nulos
-
 Se realizó un análisis de valores nulos en el dataset y se tomaron las siguientes decisiones:
-
 ✅ **Sustitución de nulos en columnas numéricas**:
    - `age` → **Sustituido por la mediana** (38.0).
    - `duration` → **Sustituido por la mediana** (179.0).
    - Resto de columnas numéricas **se mantienen con NaN** para futuras decisiones.
-
 ✅ **Sustitución de nulos en columnas categóricas**:
    - Se reemplazaron valores nulos en variables categóricas con `'unknown'` para evitar la pérdida de información.
-
 Los cambios fueron implementados en el script `src/sp_limpieza.py` dentro de la función `rellenar_nulos_numericas`.
-
-
 
 **Comparación de correlaciones**
 Correlaciones entre Variables
-
 ✅ Calculamos la matriz de correlaciones entre las variables numéricas.
 ✅ Identificamos relaciones destacadas como:
 
@@ -333,7 +281,6 @@ emp_var_rate y euribor3m con una correlación de 0.82, lo que indica una fuerte 
 campaign y previous tienen una correlación muy baja, lo que sugiere que las interacciones previas con clientes no afectan significativamente el número de intentos en la campaña actual.
 
  **Outliers (Valores Atípicos)**
-
 ✅ Identificamos outliers en varias columnas, especialmente en duration, campaign y pdays.
 ✅ No eliminamos los outliers, ya que podrían representar información valiosa para el análisis.
 ✅ Mencionamos en el informe que, en futuros análisis, se puede considerar tratarlos dependiendo del enfoque del negocio.
@@ -342,7 +289,6 @@ campaign y previous tienen una correlación muy baja, lo que sugiere que las int
 Algunas variables presentan alta correlación.
 Se encontraron valores atípicos en duration y campaign, lo que requerirá un tratamiento especial.
 El análisis de outliers y su impacto en el modelo será evaluado en sesiones posteriores.
-
 ** Conclusiones principales:**
 ✅ La duración de la última campaña (duration) presenta una gran variabilidad y valores extremos.
 ✅ Algunas variables presentan correlaciones fuertes, lo que puede ayudar a definir estrategias de segmentación de clientes.
@@ -350,8 +296,6 @@ El análisis de outliers y su impacto en el modelo será evaluado en sesiones po
 
 El dataset actualizado sigue estando disponible como bank_limpio.csv en la carpeta data/.
 ---
-
-
 
 ### 💾 **Guardado de Datos**
 El dataset limpio y procesado se guardó en la carpeta `data` bajo el nombre `bank_limpio.csv`.  
